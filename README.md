@@ -1,2 +1,2 @@
 # SP-PT
-Seminární práce z předmětu KIV-PT
+Semestrální práce z předmětu KIV-PT
