@@ -26,9 +26,11 @@ public class Main {
 	 * @param args 
 	 */
 	public static void main(String[] args) {
+		long start = System.currentTimeMillis();
 		File soubor = new File("test_optim_sink.txt");
 		inicializaceDat(soubor); //inicializace dat (vybrani-vycisteni dat ze souboru, rozdeleni do konkretnich matic)
-		
+		long konec = System.currentTimeMillis();
+		System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
 		System.out.println("D " + pocetD);
 		System.out.println("S " + pocetS);
 		System.out.println("Z " + pocetZ);
@@ -38,6 +40,7 @@ public class Main {
 		System.out.println("q " + Arrays.deepToString(pocZasoby));
 		System.out.println("p " + Arrays.deepToString(produkceD));
 		System.out.println("r " + Arrays.deepToString(poptavkaS));
+		
 	}
 	
 	/**
@@ -67,18 +70,18 @@ public class Main {
 		pocZasoby = new int[pocetZ][pocetS];
 		produkceD = new int[pocetZ*pocetT][pocetD];
 		poptavkaS = new int[pocetZ*pocetT][pocetS];
-		for (int i = 0; i < pocetD; i ++) { //inicializace pole cen prevozu
+		for (int d = 0; d < pocetD; d ++) { //inicializace pole cen prevozu
 			String[] line = nacteni.getFirst().split(" "); //vzdy prvni radku rozdelim do pole Stringu - kazda hodnota je na svem miste v poli
 			nacteni.removeFirst();
-			for (int j = 0; j < line.length; j++) {
-				cenyPrevozu[i][j] = Integer.parseInt(line[j]); //preparsovane hodnoty vlozim do vysledneho intoveho pole cenProvozu
+			for (int s = 0; s < line.length; s++) {
+				cenyPrevozu[d][s] = Integer.parseInt(line[s]); //preparsovane hodnoty vlozim do vysledneho intoveho pole cenProvozu
  			}
 		}
-		for (int i = 0; i < pocetZ; i ++) { //inicializace pole pocatecnich zasob S
+		for (int z = 0; z < pocetZ; z ++) { //inicializace pole pocatecnich zasob S
 			String[] line = nacteni.getFirst().split(" ");
 			nacteni.removeFirst();
-			for (int j = 0; j < line.length; j++) {
-				pocZasoby[i][j] = Integer.parseInt(line[j]);
+			for (int s = 0; s < line.length; s++) {
+				pocZasoby[z][s] = Integer.parseInt(line[s]);
  			}
 		}
 		for (int i = 0; i < (pocetZ*pocetT); i++) { //inicializace pole produkce tovaren
@@ -96,5 +99,5 @@ public class Main {
 			}
 		}
 	}
-	
+		
 }
