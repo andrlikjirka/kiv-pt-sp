@@ -71,6 +71,7 @@
 20 0
 20 0
 
+# VYPOCET CENY NEDAVA SMYSL (otocene cislovani druhu Z a dnu???)
 # Ocekavana cena: prvni den: 1*20+100*20=2020
 #                 druhy den: 1*20+  1*20=  40
 #                    celkem:             2060

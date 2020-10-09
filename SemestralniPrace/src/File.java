@@ -42,7 +42,7 @@ public class File {
 				data.add(line);	//do seznamu Stringu pridam nactenou radku
 			}
 		} catch (IOException e) {
-			System.out.println("Reading from file failed.");
+			System.err.println("Reading from file failed.");
 		}
 		return data;
 	}

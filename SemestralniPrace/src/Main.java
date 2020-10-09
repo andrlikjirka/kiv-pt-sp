@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 
 /**
@@ -19,28 +21,62 @@ public class Main {
 	public static int[][] cenyPrevozu;
 	public static int[][] pocZasoby;
 	public static int[][] produkceD;
-	public static int[][] poptavkaS;
+	public static int[][] poptavkyS;
+	
+	public static ArrayList<Tovarna> tovarny;
+	public static ArrayList<Supermarket> supermarkety;
+	
+	public static Scanner user = new Scanner(System.in);
 	
 	/**
 	 * 
 	 * @param args 
 	 */
 	public static void main(String[] args) {
+		/*
+		System.out.println("LUBOSUV LOGISTICKY SYSTEM\n=========================");
+		out: while (true) {
+			int volba = start();
+			switch (volba)
+			{
+				case 1:
+					break;
+					
+				case 2:
+					System.out.println("_________________________\nKonec programu");
+					break out;
+			}
+			System.out.println();	
+		}
+		*/
 		long start = System.currentTimeMillis();
-		File soubor = new File("test_optim_sink.txt");
+		File soubor = new File("test_optim.txt");
 		inicializaceDat(soubor); //inicializace dat (vybrani-vycisteni dat ze souboru, rozdeleni do konkretnich matic)
-		long konec = System.currentTimeMillis();
-		System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
+		
 		System.out.println("D " + pocetD);
 		System.out.println("S " + pocetS);
 		System.out.println("Z " + pocetZ);
 		System.out.println("T " + pocetT);
 		
-		System.out.println("c " + Arrays.deepToString(cenyPrevozu));
-		System.out.println("q " + Arrays.deepToString(pocZasoby));
-		System.out.println("p " + Arrays.deepToString(produkceD));
-		System.out.println("r " + Arrays.deepToString(poptavkaS));
+		//System.out.println("c " + Arrays.deepToString(cenyPrevozu));
+		//System.out.println("q " + Arrays.deepToString(pocZasoby));
+		//System.out.println("p " + Arrays.deepToString(produkceD));
+		//System.out.println("r " + Arrays.deepToString(poptavkyS));
+		//System.out.println();
 		
+		inicializaceTovaren();
+		for (int i = 0; i < tovarny.size(); i++) {
+			System.out.println(tovarny.get(i).toString());
+		}
+		System.out.println();
+		inicializaceSupermarketu();
+		for (int i = 0; i < supermarkety.size(); i++) {
+			System.out.println(supermarkety.get(i).toString());
+		}
+		
+		long konec = System.currentTimeMillis();
+		System.out.println("\ncas nacteni a inicializace dat: " + (konec-start) + "ms\n");
+	
 	}
 	
 	/**
@@ -69,7 +105,7 @@ public class Main {
 		cenyPrevozu = new int[pocetD][pocetS];
 		pocZasoby = new int[pocetZ][pocetS];
 		produkceD = new int[pocetZ*pocetT][pocetD];
-		poptavkaS = new int[pocetZ*pocetT][pocetS];
+		poptavkyS = new int[pocetZ*pocetT][pocetS];
 		for (int d = 0; d < pocetD; d ++) { //inicializace pole cen prevozu
 			String[] line = nacteni.getFirst().split(" "); //vzdy prvni radku rozdelim do pole Stringu - kazda hodnota je na svem miste v poli
 			nacteni.removeFirst();
@@ -95,9 +131,107 @@ public class Main {
 			String[] line = nacteni.getFirst().split(" ");
 			nacteni.removeFirst();
 			for (int j = 0; j < line.length; j++) {
-				poptavkaS[i][j] = Integer.parseInt(line[j]);
+				poptavkyS[i][j] = Integer.parseInt(line[j]);
 			}
 		}
 	}
+	
+	
+	public static void inicializaceTovaren(){
+		tovarny = new ArrayList<Tovarna>(pocetD);
+		int iDen;
+		int iZbozi;
+
+		for (int i = 0; i < pocetD; i++) { //pocetD = produkceD[0].length
+			iDen = 0;
+			iZbozi = 0;
+			int[][] produkceTovarny = new int[pocetT][pocetZ];
+			for (int j = 0; j < produkceD.length; j++) { //produkceD.length = pocetZ*pocetT
+				if (iDen == pocetT) {
+					iDen = 0;
+					iZbozi++;
+				}
+				produkceTovarny[iDen][iZbozi] = produkceD[j][i];
+				//System.out.println(produkceD[j][i]);
+				iDen++;
+			}
+			Tovarna t = new Tovarna(i+1, produkceTovarny);
+			tovarny.add(t);
+		}
+	}
+	
+	public static void inicializaceSupermarketu() {
+		supermarkety = new ArrayList<Supermarket>(pocetS);
+		int iDen;
+		int iZbozi;
+		for (int i = 0; i < pocetS; i++) {
+			iDen = 0;
+			iZbozi = 0;
+			int[][] poptavkaSupermarketu = new int[pocetT][pocetZ];
+			for (int j = 0; j < poptavkyS.length; j++) {
+				if (iDen == pocetT) {
+					iDen = 0;
+					iZbozi++;
+				}
+				poptavkaSupermarketu[iDen][iZbozi] = poptavkyS[j][i];
+				iDen++;
+			}
+			int[][] skladSupermarketu = new int[pocetT][pocetZ];
+			iDen = 0;
+			iZbozi = 0;
+			for (int j = 0; j < pocZasoby.length; j++) {
+				skladSupermarketu[iDen][iZbozi] = pocZasoby[j][i];
+				iZbozi++;
+			}
+			Supermarket s = new Supermarket(i+1, poptavkaSupermarketu, skladSupermarketu); //+sklady
+			supermarkety.add(s);
+		}
 		
+	}
+	
+	
+	/**
+	 * Metoda vypisujici menu
+	 * @return String retezec voleb menu
+	 */
+	public static String menu() {
+		String menu = "";
+		menu += "Menu\n";
+		menu += "[1] \n";
+		menu += "[2] EXIT\n";
+		menu += "-------------------------\n";
+		menu += "Volba: ";
+		return menu;
+	}
+	
+	/**
+	 * Uzivatelske zadavani volby menu (osetreni proti jinym formatum nez int)
+	 * @return zadane cislo uzivatelem
+	 */
+	public static int userMenuQuery() {
+		int input;
+		try{
+		    input = Integer.parseInt(user.nextLine());
+		} catch(NumberFormatException ex){ 
+		    System.err.print("Not a number. ");
+		    input = -1;
+		}
+		return input;
+	}
+	
+	/**
+	 * Metoda zajistuje spusteni menu a osetreni vstupu volby
+	 * @return platna volba zadana uzivatelem
+	 */
+	public static int start() {
+		String menu = menu();
+		System.out.print(menu);
+		int volba = userMenuQuery();
+		while ((volba < 0) || (volba > 2)) {
+			System.out.print("Zadejte dostupnou volbu: ");
+			volba = userMenuQuery();
+		}
+		System.out.println();
+		return volba;
+	}
 }
