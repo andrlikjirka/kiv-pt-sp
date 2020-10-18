@@ -51,7 +51,7 @@ public class Main {
 		*/
 		try {
 			long start = System.currentTimeMillis();
-			File soubor = new File("test_optim.txt");
+			File soubor = new File("vstupni-data/test_optim.txt");
 			inicializace(soubor); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
 			
 			Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu);
