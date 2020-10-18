@@ -1,8 +1,8 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
-
 
 /**
  * 
@@ -49,20 +49,36 @@ public class Main {
 			System.out.println();	
 		}
 		*/
-		long start = System.currentTimeMillis();
-		File soubor = new File("test_optim.txt");
-		inicializaceDat(soubor); //inicializace dat (vybrani-vycisteni dat ze souboru, rozdeleni do konkretnich matic)
+		try {
+			long start = System.currentTimeMillis();
+			File soubor = new File("test_optim.txt");
+			inicializace(soubor); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
+			
+			Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu);
+			s.startSimulation(pocetT, pocetZ);
+			
+			long konec = System.currentTimeMillis();
+			System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
+			
+		} catch (IOException e) {
+			System.err.println("Reading from file failed.");
+		} 
+	}
+	
+	
+	public static void inicializace(File soubor) throws IOException {
+		nacteniDat(soubor); //inicializace dat (vybrani-vycisteni dat ze souboru, rozdeleni do konkretnich matic)
 		
 		System.out.println("D " + pocetD);
 		System.out.println("S " + pocetS);
 		System.out.println("Z " + pocetZ);
 		System.out.println("T " + pocetT);
 		
-		//System.out.println("c " + Arrays.deepToString(cenyPrevozu));
+		System.out.println("\nc " + Arrays.deepToString(cenyPrevozu));
 		//System.out.println("q " + Arrays.deepToString(pocZasoby));
 		//System.out.println("p " + Arrays.deepToString(produkceD));
 		//System.out.println("r " + Arrays.deepToString(poptavkyS));
-		//System.out.println();
+		System.out.println();
 		
 		inicializaceTovaren();
 		for (int i = 0; i < tovarny.size(); i++) {
@@ -73,17 +89,15 @@ public class Main {
 		for (int i = 0; i < supermarkety.size(); i++) {
 			System.out.println(supermarkety.get(i).toString());
 		}
-		
-		long konec = System.currentTimeMillis();
-		System.out.println("\ncas nacteni a inicializace dat: " + (konec-start) + "ms\n");
-	
+		System.out.println();
 	}
 	
 	/**
 	 * Metoda rozdeli seznam nactenych dat do danych matic
 	 * @param soubor Soubor ze ktereho se nacitaji data
+	 * @throws IOException 
 	 */
-	public static void inicializaceDat(File soubor) {
+	public static void nacteniDat(File soubor) throws IOException {
 		//pole stringu obsahuje vycistena data ze souboru
 		//PROC LINKEDLIST (A NE ARRAYLIST)? LINKEDLIST MA OPERACE GETFIRST A REMOVEFIRST V O(1) 
 			// ARRAYLIST MA JEN GET A REMOVE V O(n)
@@ -134,6 +148,7 @@ public class Main {
 				poptavkyS[i][j] = Integer.parseInt(line[j]);
 			}
 		}
+		nacteni = null;
 	}
 	
 	
@@ -176,7 +191,7 @@ public class Main {
 				poptavkaSupermarketu[iDen][iZbozi] = poptavkyS[j][i];
 				iDen++;
 			}
-			int[][] skladSupermarketu = new int[pocetT][pocetZ];
+			int[][] skladSupermarketu = new int[1][pocetZ];
 			iDen = 0;
 			iZbozi = 0;
 			for (int j = 0; j < pocZasoby.length; j++) {
@@ -197,7 +212,7 @@ public class Main {
 	public static String menu() {
 		String menu = "";
 		menu += "Menu\n";
-		menu += "[1] \n";
+		menu += "[1] Spustit zakladni simulaci";
 		menu += "[2] EXIT\n";
 		menu += "-------------------------\n";
 		menu += "Volba: ";

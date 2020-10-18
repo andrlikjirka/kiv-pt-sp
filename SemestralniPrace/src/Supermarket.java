@@ -9,8 +9,8 @@ import java.util.Arrays;
  * @author jandrlik
  */
 public class Supermarket {
-	private int ID;
-	private int[][] poptavka;
+	public int ID;
+	public int[][] poptavka;
 	public int[][] sklad;
 	
 	public Supermarket(int iD, int[][] poptavka, int[][] sklad) {
@@ -31,5 +31,5 @@ public class Supermarket {
 	public String toString() {
 		return "Supermarket [ID=S" + ID + ", poptavka=" + Arrays.deepToString(poptavka) + ", sklad=" + Arrays.deepToString(sklad) + "]";
 	}
-		
+
 }

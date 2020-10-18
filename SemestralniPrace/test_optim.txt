@@ -1,4 +1,4 @@
-# Data pro semestralni praci KIV/PT 2020/2021
+# Diata pro semestralni praci KIV/PT 2020/2021
 # Vytvoreno systemem "Lubos", 31.8.2020.
 #
 # prazdne radky nebo radky zacinajici znakem # se ingoruji
