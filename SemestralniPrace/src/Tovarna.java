@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class Tovarna {
 	private int ID;
-	private int[][] produkce;
+	public int[][] produkce;
 	
 	public Tovarna(int iD, int[][] produkce) {	
 		this.ID = iD;

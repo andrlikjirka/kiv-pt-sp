@@ -31,22 +31,7 @@ public class File {
 	 */
 	public LinkedList<String> nactiData() throws IOException {
 		LinkedList<String> data = new LinkedList<String>(); 
-		/*
-		try (Scanner sc = new Scanner(Paths.get(nazevSouboru))){
-			while(sc.hasNextLine()) {
-				String line = sc.nextLine(); //nacteni radky
-				if (line.equals("")) { //ignorovani prazdne radky
-					continue;
-				}
-				if (line.charAt(0)=='#') { //ignorovani radky zacinajici krizkem
-					continue;
-				}
-				data.add(line);	//do seznamu Stringu pridam nactenou radku
-			}
-		} catch (IOException e) {
-			System.out.println("Reading from file failed.");
-		}
-		*/
+		
 		Scanner sc = new Scanner(Paths.get(nazevSouboru));
 		while(sc.hasNextLine()) {
 			String line = sc.nextLine(); //nacteni radky

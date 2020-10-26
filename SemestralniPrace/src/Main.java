@@ -13,6 +13,8 @@ import java.util.Scanner;
  * @author jandrlik
  */
 public class Main {
+	public final static int POCET_VOLEB_MENU = 2;
+	
 	public static int pocetD;
 	public static int pocetS;
 	public static int pocetZ;
@@ -49,16 +51,17 @@ public class Main {
 			System.out.println();	
 		}
 		*/
-		try {
-			long start = System.currentTimeMillis();
+		try { 
 			File soubor = new File("vstupni-data/test_optim.txt");
 			inicializace(soubor); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
 			
-			Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu);
+			long start = System.currentTimeMillis();
+			Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
 			s.startSimulation(pocetT, pocetZ);
 			
 			long konec = System.currentTimeMillis();
-			System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
+			//System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
+			System.out.println("\ncas simulace: " + (konec-start) + "ms\n");
 			
 		} catch (IOException e) {
 			System.err.println("Reading from file failed.");
@@ -81,15 +84,19 @@ public class Main {
 		System.out.println();
 		
 		inicializaceTovaren();
+		/*
 		for (int i = 0; i < tovarny.size(); i++) {
 			System.out.println(tovarny.get(i).toString());
 		}
 		System.out.println();
+		*/
 		inicializaceSupermarketu();
+		/*
 		for (int i = 0; i < supermarkety.size(); i++) {
 			System.out.println(supermarkety.get(i).toString());
 		}
 		System.out.println();
+		*/
 	}
 	
 	/**
@@ -167,7 +174,6 @@ public class Main {
 					iZbozi++;
 				}
 				produkceTovarny[iDen][iZbozi] = produkceD[j][i];
-				//System.out.println(produkceD[j][i]);
 				iDen++;
 			}
 			Tovarna t = new Tovarna(i+1, produkceTovarny);
@@ -191,11 +197,11 @@ public class Main {
 				poptavkaSupermarketu[iDen][iZbozi] = poptavkyS[j][i];
 				iDen++;
 			}
-			int[][] skladSupermarketu = new int[1][pocetZ];
+			int[] skladSupermarketu = new int[pocetZ];
 			iDen = 0;
 			iZbozi = 0;
 			for (int j = 0; j < pocZasoby.length; j++) {
-				skladSupermarketu[iDen][iZbozi] = pocZasoby[j][i];
+				skladSupermarketu[iZbozi] = pocZasoby[j][i];
 				iZbozi++;
 			}
 			Supermarket s = new Supermarket(i+1, poptavkaSupermarketu, skladSupermarketu); //+sklady
@@ -242,7 +248,7 @@ public class Main {
 		String menu = menu();
 		System.out.print(menu);
 		int volba = userMenuQuery();
-		while ((volba < 0) || (volba > 2)) {
+		while ((volba < 0) || (volba > POCET_VOLEB_MENU)) {
 			System.out.print("Zadejte dostupnou volbu: ");
 			volba = userMenuQuery();
 		}

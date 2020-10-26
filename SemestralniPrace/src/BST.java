@@ -8,12 +8,18 @@
  */
 public class BST {
 	public Node root; // koren stromu
+	private int counterNodes = 0; 
 
+	public int getCounterNodes() {
+		return counterNodes;
+	}
+	
 	/**
 	 * Metoda prida do BST uzel s danym klicem
 	 * @param key klic 
 	 */
 	public void add(int key, int ID) {
+		counterNodes++;
 		if (root == null) // debug ==; jedno = je prirazeni, dve == porovnani
 			root = new Node(key, ID);
 		else
@@ -55,6 +61,7 @@ public class BST {
 	 * @param key klic
 	 */
 	private void remove(String minMax) {
+		counterNodes--;
 		Node n = root; // n = odebirany vrchol
 		Node ancestor = null; // predek odebiraneho uzlu
 		

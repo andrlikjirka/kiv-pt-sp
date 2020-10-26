@@ -1,0 +1,18 @@
+D 2
+S 2
+Z 2
+T 2
+
+c [[1, 2], [2, 1]]
+
+T1
+Pro Z1: (poptavky serazene od nejvyssi)
+Supermarket [ID=S1, poptavka=[[12, 5], [5, 12]], sklad=[1, 2]] === Tovarna [ID=D1, produkce=[[10, 10], [10, 10]]] (1, 1.5) 16
+Supermarket [ID=S2, poptavka=[[5, 12], [12, 5]], sklad=[1, 2]] === Tovarna [ID=D2, produkce=[[10, 10], [10, 10]]] (1, 1.5) 16
+
+Pro Z2: (poptavky serazene od nejvyssi)
+Supermarket [ID=S2, poptavka=[[5, 12], [12, 5]], sklad=[1, 2]] === Tovarna [ID=D2, produkce=[[10, 10], [10, 10]]] (1, 1.5) 15
+Supermarket [ID=S1, poptavka=[[12, 5], [5, 12]], sklad=[1, 2]] === Tovarna [ID=D1, produkce=[[10, 10], [10, 10]]] (1, 1.5) 15
+
+cas simulace: 15ms
+
