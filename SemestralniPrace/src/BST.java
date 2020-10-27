@@ -47,7 +47,6 @@ public class BST {
 		}
 	}
 
-	
 	public void removeMin() {
 		remove("min");
 	}
@@ -151,4 +150,11 @@ public class BST {
 	public int getMinKey() {
 		return getMinNode(root).key;
 	}
+	
+	public void clearBST() {
+		while (root != null) {
+			removeMax();
+		}
+	}
+	
 }

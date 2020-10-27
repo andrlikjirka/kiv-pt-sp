@@ -52,7 +52,7 @@ public class Main {
 		}
 		*/
 		try { 
-			File soubor = new File("vstupni-data/test_optim.txt");
+			File soubor = new File("vstupni-data/real_large.txt");
 			inicializace(soubor); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
 			
 			long start = System.currentTimeMillis();
@@ -62,6 +62,7 @@ public class Main {
 			long konec = System.currentTimeMillis();
 			//System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
 			System.out.println("\ncas simulace: " + (konec-start) + "ms\n");
+			
 			
 		} catch (IOException e) {
 			System.err.println("Reading from file failed.");
