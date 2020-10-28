@@ -51,13 +51,13 @@ public class Main {
 			System.out.println();	
 		}
 		*/
-		try { 
-			File soubor = new File("vstupni-data/real_large.txt");
+		try {
+			File soubor = new File("vstupni-data/test_optim.txt");
 			inicializace(soubor); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
 			
 			long start = System.currentTimeMillis();
 			Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
-			s.startSimulation(pocetT, pocetZ);
+			s.startSimulation();
 			
 			long konec = System.currentTimeMillis();
 			//System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
