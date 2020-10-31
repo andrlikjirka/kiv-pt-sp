@@ -1,25 +1,14 @@
-D 2
-S 2
-Z 2
-T 2
-
-c [[1, 2], [2, 1]]
-
 celkova popt: 68
-Supermarket [ID=S1, poptavka=[[12, 5], [5, 12]], sklad=[1, 2]]
-Supermarket [ID=S2, poptavka=[[5, 12], [12, 5]], sklad=[1, 2]]
 T1
 Pro Z1
 D1=>S1: 10ks, cena=10
 sklad=>S1: 1ks
 D2=>S1: 1ks, cena=2
 D2=>S2: 5ks, cena=5
-
 Pro Z2
 D2=>S2: 10ks, cena=10
 sklad=>S2: 2ks
 D1=>S1: 5ks, cena=5
-
 ------------------------
 T2
 Pro Z1
@@ -27,20 +16,10 @@ D2=>S2: 10ks, cena=10
 sklad=>S2: 1ks
 D1=>S2: 1ks, cena=2
 D1=>S1: 5ks, cena=5
-
 Pro Z2
 D1=>S1: 10ks, cena=10
 sklad=>S1: 2ks
 D2=>S2: 5ks, cena=5
-
 ------------------------
-Supermarket [ID=S1, poptavka=[[0, 0], [0, 0]], sklad=[0, 0]]
-Supermarket [ID=S2, poptavka=[[0, 0], [0, 0]], sklad=[0, 0]]
 
-Celkem ze skladu: 6ks
-Celkem z Ciny: 0
-Celkem odeslano z tovaren: 62ks
 Celkova cena prepravy za cele obdobi = 64
-
-cas simulace: 11ms
-

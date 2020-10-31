@@ -9,6 +9,8 @@ import java.util.ArrayList;
  *
  */
 public class Simulace {
+	public PrintTo output;
+	
 	public ArrayList<Tovarna> tovarny;
 	public ArrayList<Supermarket> supermarkety;
 	public int pocetD;
@@ -22,8 +24,8 @@ public class Simulace {
 	public int celkemOdeslano = 0;
 	public int celkemZeSkladu = 0;
 	public int celkemZCiny = 0;
-	
-	public Simulace(ArrayList<Tovarna> d, ArrayList<Supermarket> s, int[][] c, int pocetD, int pocetS, int pocetZ, int pocetT) {
+		
+	public Simulace(PrintTo vystup, ArrayList<Tovarna> d, ArrayList<Supermarket> s, int[][] c, int pocetD, int pocetS, int pocetZ, int pocetT) {
 		this.tovarny = d;
 		this.supermarkety = s;
 		this.cenyPrevozu = c;
@@ -31,14 +33,15 @@ public class Simulace {
 		this.pocetS = pocetS;
 		this.pocetZ = pocetZ;
 		this.pocetT = pocetT;
+		this.output = vystup;
 	}
 
 	public void startSimulation() {
 		BST BSTsup; //strom pro urceni nejvyssich poptavek
 		BST BSTcenyD; //strom pro urceni tovaren ze kterych lze dovezt nejlevneji
 		
-		int pocetSveStromu = 0;
-		
+		int pocetSveStromu = 0; //pocet supermarketu ve stromu
+
 		int celkPopt = 0; 
 		for (int i = 0; i < pocetS; i++) {
 			Supermarket s = supermarkety.get(i);
@@ -49,22 +52,26 @@ public class Simulace {
 			}
 		}
 		System.out.println("celkova popt: " + celkPopt);
+		output.zapisDoSouboru("celkova popt: " + celkPopt);
 		
 		for (int i = 0; i < pocetS; i++) {
-			System.out.println(supermarkety.get(i).toString());
+			System.out.println(supermarkety.get(i).toString()); //vypis supermerketu pro kontrolu (pred a po simulaci)
 		}
 		
-		
+		//hlavni cyklus simulace
 		for (int t = 0; t < pocetT; t++) {
 			System.out.println("T" + (t+1));
+			output.zapisDoSouboru("T" + (t+1));
 			
 			// metoda prepocitani produkce ve vsech tovarnach pro druhy den a vys (pripocitani nevyuzitych ks z predchoziho dne)
 			if (t >= 1) {
 				//prepocteniProdukceDalsiDen(tovarny, t);
 			}
-
+			
 			for (int z = 0; z < pocetZ; z++) { // prochazeni druhu zbozi
 				System.out.println("Pro Z" + (z + 1));
+				output.zapisDoSouboru("Pro Z" + (z + 1));
+				
 				BSTsup = new BST(); // zjistovani poradi poptavek
 				BSTcenyD = new BST(); // zjistovani cen mezi D a S
 				
@@ -95,10 +102,8 @@ public class Simulace {
 						if (supermarkety.get(supermarketSnejPopt-1).poptavka[t][z] == 0) {
 							uspokojenaPopt = true;
 						} 
-						
 						if (uspokojenaPopt == false)
 							uspokojenizCiny(supermarketSnejPopt, t, z);	
-						
 						continue;
 					}
 					
@@ -126,6 +131,7 @@ public class Simulace {
 				System.out.println();
 			}
 		System.out.println("------------------------");	
+		output.zapisDoSouboru("------------------------");
 		}
 		
 		for (int i = 0; i < pocetS; i++) {
@@ -135,7 +141,9 @@ public class Simulace {
 		System.out.print("\nCelkem ze skladu: " + celkemZeSkladu + "ks");
 		System.out.print("\nCelkem z Ciny: " + celkemZCiny);
 		System.out.print("\nCelkem odeslano z tovaren: " + celkemOdeslano + "ks");
-		System.out.println("\nCelkova cena prepravy za cele obdobi = " + celkovaCena);	
+		System.out.println();
+		System.out.println("\nCelkova cena prepravy za cele obdobi = " + celkovaCena);
+		output.zapisDoSouboru("\nCelkova cena prepravy za cele obdobi = " + celkovaCena);
 	}
 		
 	public void uspokojeniPoptavky(Supermarket supermarket, Tovarna tovarna, int den, int druhZbozi, int cenaDS, double prumernaCena) {
@@ -145,17 +153,17 @@ public class Simulace {
 			if (supermarket.sklad[druhZbozi] > 0) {
 				if (cenaDS < prumernaCena) {
 					//z tovarny (snizit potrebujeKoupitMesic)
-					zTovarny(supermarket, tovarna, den, druhZbozi, cenaDS, potrebujeKoupitMesic, prumernaCena);
+					zTovarny(supermarket, tovarna, den, druhZbozi, cenaDS);
 				} else { //cenaDS >= prumernaCena
 					zeSkladu(supermarket, den, druhZbozi);
 					if (uspokojenaPopt == false) { //pokud po uspokojeni ze skladu stale neni popt S uspokojena, je nutne i za drahou cenu dovezt z tovarny
-						zTovarny(supermarket, tovarna, den, druhZbozi, cenaDS, potrebujeKoupitMesic, prumernaCena);
+						zTovarny(supermarket, tovarna, den, druhZbozi, cenaDS);
 					}
 				}
 			} 
 			else { // supermarket.sklad[druhZbozi] <= 0
 				//z tovarny (snizit potrebujeKoupitMesic)
-				zTovarny(supermarket, tovarna, den, druhZbozi, cenaDS, potrebujeKoupitMesic, prumernaCena);
+				zTovarny(supermarket, tovarna, den, druhZbozi, cenaDS);
 			}
 		} else { //potrebujeKoupitMesic <= 0
 			//ze skladu
@@ -163,7 +171,7 @@ public class Simulace {
 		}
 	}
 	
-	private void zTovarny(Supermarket supermarket, Tovarna tovarna, int den, int druhZbozi, int cenaDS, int potrebujKoupitMesic, double prumernaCena) {
+	private void zTovarny(Supermarket supermarket, Tovarna tovarna, int den, int druhZbozi, int cenaDS) {
 		int pocet = tovarna.produkce[den][druhZbozi] - supermarket.poptavka[den][druhZbozi];
 		if (pocet >= 0) { //staci produkce tovarny k uspokojeni poptavky
 			int odeslanozDdoS = supermarket.poptavka[den][druhZbozi];
@@ -185,7 +193,9 @@ public class Simulace {
 		tovarna.produkce[den][druhZbozi] -= odeslanozDdoS;
 		supermarket.poptavka[den][druhZbozi] -= odeslanozDdoS;
 		supermarkety.get(supermarket.getID()-1).potrebujeKoupitMesic[druhZbozi] -= odeslanozDdoS;
+		
 		System.out.println("D" + tovarna.getID() + "=>" + "S" + supermarket.getID() + ": " + odeslanozDdoS + "ks, cena=" + cenaDilci);
+		output.zapisDoSouboru("D" + tovarna.getID() + "=>" + "S" + supermarket.getID() + ": " + odeslanozDdoS + "ks, cena=" + cenaDilci);
 	}
 	
 	private void zeSkladu(Supermarket supermarket, int den, int druhZbozi) {
@@ -205,7 +215,9 @@ public class Simulace {
 		celkemZeSkladu += pouzitoZeSkladu;
 		supermarket.sklad[druhZbozi] -= pouzitoZeSkladu;
 		supermarket.poptavka[den][druhZbozi] -= pouzitoZeSkladu;
+		
 		System.out.println("sklad=>" + "S" + supermarket.getID() + ": " + pouzitoZeSkladu + "ks");
+		output.zapisDoSouboru("sklad=>" + "S" + supermarket.getID() + ": " + pouzitoZeSkladu + "ks");
 	}
 	
 	private double prumernaCenaDS(int s) {
@@ -219,16 +231,21 @@ public class Simulace {
 	public void prepocteniProdukceDalsiDen(ArrayList<Tovarna> tovarny, int den) {
 		for (int i = 0; i < tovarny.size(); i++) {
 			//k produkcim kazdeho druhu zbozi v dany den pricist to co zbylo z minuleho dne
-			Tovarna t = tovarny.get(i);
+			//Tovarna t = tovarny.get(i);
+			//for (int j = 0; j < pocetZ; j++) {
+				//t.produkce[den][j] += t.produkce[den-1][j];
+			//}
 			for (int j = 0; j < pocetZ; j++) {
-				t.produkce[den][j] += t.produkce[den-1][j];
+				tovarny.get(i).produkce[den][j] += tovarny.get(i).produkce[den-1][j];
 			}
 		}
 	}
 	
 	public void uspokojenizCiny(int supermarketID, int den, int druhZbozi) {
-			celkemZCiny += supermarkety.get(supermarketID-1).poptavka[den][druhZbozi];
-			System.out.println("T" + (den+1) + ": Neni mozne uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).poptavka[den][druhZbozi] + "ks z Ciny.");
+		celkemZCiny += supermarkety.get(supermarketID-1).poptavka[den][druhZbozi];
+		
+		System.out.println("T" + (den+1) + ": Neni mozne uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).poptavka[den][druhZbozi] + "ks z Ciny.");
+		output.zapisDoSouboru("T" + (den+1) + ": Neni mozne uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).poptavka[den][druhZbozi] + "ks z Ciny.");
 	}
 	
 }

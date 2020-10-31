@@ -3,14 +3,22 @@
  */
 
 /**
- * @author Jirka Andrlík
- *
+ * Trida reprezentujici uzel ve stromu
+ * @author jandrlik
  */
 public class Node {
-	public int key; //jmeno souboru
+	/** Klic uzlu */
+	public int key; 
+	/** ID uzlu */
 	public int ID;
-	public Node left, right; //potomci
+	/** Potomci uzlu (levy a pravy) */
+	public Node left, right; 
 	
+	/**
+	 * Konstruktor vytvori novy uzel
+	 * @param key klic uzlu
+	 * @param ID id uzlu
+	 */
 	public Node (int key, int ID) {
 		this.key = key;
 		this.ID = ID;

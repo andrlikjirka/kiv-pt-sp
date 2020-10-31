@@ -9,68 +9,85 @@ import java.util.Scanner;
  */
 
 /**
- * 
+ * Hlavni trida programu obsahujici spousteci kod programu
  * @author jandrlik
  */
 public class Main {
+	/** Nazev vstupniho souboru */
+	public static final String NAZEV_VSTUPNIHO_SOUBORU = "vstupni-data/test_optim.txt";
+	/** Nazev vystupniho souboru - pro hlavni vystup simulace rozvozu vyrobku */
+	public static final String NAZEV_VYSTUPU = "vystup-soubory/output.txt";
+	/** Pocet voleb v menu */
 	public final static int POCET_VOLEB_MENU = 2;
 	
+	/** Pocet tovaren */
 	public static int pocetD;
+	/** Pocet supermarketu */
 	public static int pocetS;
+	/** Pocet druhu zbozi */
 	public static int pocetZ;
+	/** Pocet dnu */
 	public static int pocetT;
-	
+	/** Matice cen prevozu */
 	public static int[][] cenyPrevozu;
+	/** Matice pocatecnich zasob */
 	public static int[][] pocZasoby;
+	/** Matice produkce tovaren */
 	public static int[][] produkceD;
+	/** Matice poptavek supermarketu */
 	public static int[][] poptavkyS;
 	
+	/** Seznam tovaren */
 	public static ArrayList<Tovarna> tovarny;
+	/** Seznam supermarketu */
 	public static ArrayList<Supermarket> supermarkety;
 	
+	/** Scanner pro uzivatelsky vstup */
 	public static Scanner user = new Scanner(System.in);
 	
 	/**
-	 * 
-	 * @param args 
+	 * Hlavni metoda (vstupni bod programu)
+	 * @param args parametry prikazove radky (nevyuzite)
 	 */
 	public static void main(String[] args) {
-		/*
 		System.out.println("LUBOSUV LOGISTICKY SYSTEM\n=========================");
 		out: while (true) {
-			int volba = start();
+			int volba = startVolba();
 			switch (volba)
 			{
-				case 1:
+				case 1: //[1] - Spusteni zakladni simulace
+					spusteniSimulace();
 					break;
 					
-				case 2:
-					System.out.println("_________________________\nKonec programu");
+				case 2: //[2] - Exit
+					System.out.println("_________________________\nProgram ukoncen.");
 					break out;
 			}
-			System.out.println();	
 		}
-		*/
-		try {
-			File soubor = new File("vstupni-data/test_optim.txt");
-			inicializace(soubor); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
-			
-			long start = System.currentTimeMillis();
-			Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
-			s.startSimulation();
-			
-			long konec = System.currentTimeMillis();
-			//System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
-			System.out.println("\ncas simulace: " + (konec-start) + "ms\n");
-			
-			
-		} catch (IOException e) {
-			System.err.println("Reading from file failed.");
-		} 
 	}
 	
+	/**
+	 * 
+	 */
+	public static void spusteniSimulace() {
+		ReadFrom vstup = new ReadFrom(NAZEV_VSTUPNIHO_SOUBORU);
+		inicializace(vstup); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
+		
+		PrintTo vystup = new PrintTo(NAZEV_VYSTUPU);
+		
+		long start = System.currentTimeMillis();
+
+		Simulace s = new Simulace(vystup, tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
+		s.startSimulation();
 	
-	public static void inicializace(File soubor) throws IOException {
+		long konec = System.currentTimeMillis();
+		//System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
+		System.out.println("\ncas simulace: " + (konec-start) + "ms\n");
+		System.out.println("=========================");
+
+	}
+	
+	public static void inicializace(ReadFrom soubor) {
 		nacteniDat(soubor); //inicializace dat (vybrani-vycisteni dat ze souboru, rozdeleni do konkretnich matic)
 		
 		System.out.println("D " + pocetD);
@@ -105,7 +122,7 @@ public class Main {
 	 * @param soubor Soubor ze ktereho se nacitaji data
 	 * @throws IOException 
 	 */
-	public static void nacteniDat(File soubor) throws IOException {
+	public static void nacteniDat(ReadFrom soubor) {
 		//pole stringu obsahuje vycistena data ze souboru
 		//PROC LINKEDLIST (A NE ARRAYLIST)? LINKEDLIST MA OPERACE GETFIRST A REMOVEFIRST V O(1) 
 			// ARRAYLIST MA JEN GET A REMOVE V O(n)
@@ -219,7 +236,7 @@ public class Main {
 	public static String menu() {
 		String menu = "";
 		menu += "Menu\n";
-		menu += "[1] Spustit zakladni simulaci";
+		menu += "[1] Spustit zakladni simulaci\n";
 		menu += "[2] EXIT\n";
 		menu += "-------------------------\n";
 		menu += "Volba: ";
@@ -245,7 +262,7 @@ public class Main {
 	 * Metoda zajistuje spusteni menu a osetreni vstupu volby
 	 * @return platna volba zadana uzivatelem
 	 */
-	public static int start() {
+	public static int startVolba() {
 		String menu = menu();
 		System.out.print(menu);
 		int volba = userMenuQuery();

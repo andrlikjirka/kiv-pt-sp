@@ -7,7 +7,10 @@
  * @author jandrlik
  */
 public class BST {
-	public Node root; // koren stromu
+	/**	Koren stromu */
+	public Node root;
+	
+	/** Pocitadlo vrcholu */
 	private int counterNodes = 0; 
 
 	public int getCounterNodes() {
@@ -15,8 +18,9 @@ public class BST {
 	}
 	
 	/**
-	 * Metoda prida do BST uzel s danym klicem
-	 * @param key klic 
+	 * Metoda prida do BST uzel s danym klicem a ID
+	 * @param key klic
+	 * @param ID id (identifikacni cislo supermarketu nebo tovarny)
 	 */
 	public void add(int key, int ID) {
 		counterNodes++;
@@ -27,9 +31,10 @@ public class BST {
 	}
 
 	/**
-	 * Metoda vlozi pod uzel n novy uzel s klicem key
+	 * Metoda vlozi pod uzel n novy uzel s klicem key a ID
 	 * @param n vrchol, pod ktery se vlozi novy vrchol
 	 * @param key klic
+	 * @param ID id (identifikacni cislo supermarketu nebo tovarny)
 	 */
 	private void addUnder(Node n, int key, int ID) {
 		if (key < n.key) {
@@ -47,17 +52,19 @@ public class BST {
 		}
 	}
 
+	/** Metoda odstrani uzel s min klicem */
 	public void removeMin() {
 		remove("min");
 	}
 	
+	/** Metoda odstrani uzel s max klicem */
 	public void removeMax() {
 		remove("max");
 	}
 	
 	/**
-	 * Metoda odebere max vrchol s nejvetsim klicem z BST
-	 * @param key klic
+	 * Metoda odstrani uzel z BST
+	 * @param minMax rozliseni, zda bude odstranen uzel s min nebo max klicem
 	 */
 	private void remove(String minMax) {
 		counterNodes--;
@@ -106,13 +113,15 @@ public class BST {
 		}
 	}
 	
-	/**
-	 * Metoda vypise vsechny vrcholy stromu (abecedne)
-	 */
+	/** Metoda vypise serazene vsechny vrcholy stromu  */
 	public void printSorted() {
 		printSorted(root);
 	}
 	
+	/**
+	 * Rekurzivni metoda vypisu od vrcholu n 
+	 * @param n vrchol od ktereho je spusteny vypis
+	 */
 	private void printSorted(Node n) {
 		if (n != null) {
 			printSorted(n.right);
@@ -121,36 +130,63 @@ public class BST {
 		}
 	}
 	
-	public Node getMaxNode(Node n) {
+	/**
+	 * Metoda najde max uzel ve stromu
+	 * @param n uzel ze ktereho zaciname hledat max uzel
+	 * @return max uzel stromu
+	 */
+	private Node getMaxNode(Node n) {
 		if (n.right != null) {
 			return getMaxNode(n.right);
 		}
 		else return n;
 	}
 	
+	/**
+	 * Metoda vrati ID max uzlu stromu
+	 * @return ID max uzlu
+	 */
 	public int getMaxID() {
 		return getMaxNode(root).ID;
 	}
 	
+	/**
+	 * Metoda vrati klic max uzlu stromu 
+	 * @return klic max uzlu
+	 */
 	public int getMaxKey() {
 		return getMaxNode(root).key;
 	}
 	
-	public Node getMinNode(Node n) {
+	/**
+	 * Metoda najde min uzel ve stromu
+	 * @param n uzel ze kterho zaciname hledat min uzel
+	 * @return min uzel stromu
+	 */
+	private Node getMinNode(Node n) {
 		if (n.left != null) {
 			return getMinNode(n.left);
 		} 
 		else return n;
 	}
 	
+	/**
+	 * Metoda vrati ID min uzlu stromu
+	 * @return ID min uzlu 
+	 */
 	public int getMinID() {
 		return getMinNode(root).ID;
 	}
 	
+	/**
+	 * Metoda vrati klic min uzlu stromu
+	 * @return klic min uzlu
+	 */
 	public int getMinKey() {
 		return getMinNode(root).key;
 	}
 	
+	/** Metoda vycisti strom (odstrani vsechny uzly) */
 	public void clearBST() {
 		while (root != null) {
 			removeMax();

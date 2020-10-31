@@ -33,18 +33,18 @@ public class Supermarket {
 		}
 		return pole;
 	}
-
+	
 	public int getID() {
 		return ID;
 	}
-
-	public int[][] getPoptavka() {
-		return poptavka;
+	
+	public int getPoptavka(int den, int druhZbozi) {
+		return poptavka[den][druhZbozi];
 	}
 	
 	@Override
 	public String toString() {
 		return "Supermarket [ID=S" + ID + ", poptavka=" + Arrays.deepToString(poptavka) + ", sklad=" + Arrays.toString(sklad) + "]";
 	}
-
+	
 }
