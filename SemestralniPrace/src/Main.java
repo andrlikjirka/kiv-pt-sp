@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -56,7 +55,7 @@ public class Main {
 			switch (volba)
 			{
 				case 1: //[1] - Spusteni zakladni simulace
-					spusteniSimulace();
+					simulace();
 					break;
 					
 				case 2: //[2] - Exit
@@ -67,9 +66,9 @@ public class Main {
 	}
 	
 	/**
-	 * 
+	 * Metoda nacte a inicializuje potrebna data a zavola simulaci
 	 */
-	public static void spusteniSimulace() {
+	public static void simulace() {
 		ReadFrom vstup = new ReadFrom(NAZEV_VSTUPNIHO_SOUBORU);
 		inicializace(vstup); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
 		
@@ -81,12 +80,15 @@ public class Main {
 		s.startSimulation();
 	
 		long konec = System.currentTimeMillis();
-		//System.out.println("cas nacteni a inicializace dat: " + (konec-start) + "ms\n");
 		System.out.println("\ncas simulace: " + (konec-start) + "ms\n");
 		System.out.println("=========================");
 
 	}
 	
+	/**
+	 * Metoda zavola nacteni dat a inicializaci dat pro tovarny a supermarkety
+	 * @param soubor
+	 */
 	public static void inicializace(ReadFrom soubor) {
 		nacteniDat(soubor); //inicializace dat (vybrani-vycisteni dat ze souboru, rozdeleni do konkretnich matic)
 		
@@ -102,25 +104,12 @@ public class Main {
 		System.out.println();
 		
 		inicializaceTovaren();
-		/*
-		for (int i = 0; i < tovarny.size(); i++) {
-			System.out.println(tovarny.get(i).toString());
-		}
-		System.out.println();
-		*/
 		inicializaceSupermarketu();
-		/*
-		for (int i = 0; i < supermarkety.size(); i++) {
-			System.out.println(supermarkety.get(i).toString());
-		}
-		System.out.println();
-		*/
 	}
 	
 	/**
-	 * Metoda rozdeli seznam nactenych dat do danych matic
+	 * Metoda nacte data ze souboru a rozdeli seznam nactenych dat do danych matic 
 	 * @param soubor Soubor ze ktereho se nacitaji data
-	 * @throws IOException 
 	 */
 	public static void nacteniDat(ReadFrom soubor) {
 		//pole stringu obsahuje vycistena data ze souboru
@@ -176,7 +165,9 @@ public class Main {
 		nacteni = null;
 	}
 	
-	
+	/**
+	 * Metoda rozdeli souhrnnou matici produkci tovaren, vytvori instance Tovaren s prislusnymi atributy
+	 */
 	public static void inicializaceTovaren(){
 		tovarny = new ArrayList<Tovarna>(pocetD);
 		int iDen;
@@ -199,6 +190,9 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Metoda rozdeli souhrnnou matici poptavek supermarketu, vytvori instance Supermarket s prislusnymi atributy
+	 */
 	public static void inicializaceSupermarketu() {
 		supermarkety = new ArrayList<Supermarket>(pocetS);
 		int iDen;
@@ -225,9 +219,7 @@ public class Main {
 			Supermarket s = new Supermarket(i+1, poptavkaSupermarketu, skladSupermarketu); //+sklady
 			supermarkety.add(s);
 		}
-		
-	}
-	
+	}	
 	
 	/**
 	 * Metoda vypisujici menu
@@ -266,7 +258,7 @@ public class Main {
 		String menu = menu();
 		System.out.print(menu);
 		int volba = userMenuQuery();
-		while ((volba < 0) || (volba > POCET_VOLEB_MENU)) {
+		while ((volba <= 0) || (volba > POCET_VOLEB_MENU)) {
 			System.out.print("Zadejte dostupnou volbu: ");
 			volba = userMenuQuery();
 		}
