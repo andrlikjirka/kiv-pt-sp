@@ -42,7 +42,12 @@ public class Tovarna {
 		return produkce[den][druhZbozi];
 	}
 	
-	/** Setr snizi hodnotu produkce druhu zbozi v den o urcitou hodnotu (zmenu) */
+	/** 
+	 * Setr snizi hodnotu produkce druhu zbozi v den o urcitou hodnotu (zmenu)
+	 * @param den Den
+	 * @param druhZbozi Druh zbozi
+	 * @param zmena Hodnota o kterou se snizi hodnota produkce
+	 */
 	public void setSnizeniProdukce(int den, int druhZbozi, int zmena) {
 		produkce[den][druhZbozi] -= zmena;
 	}

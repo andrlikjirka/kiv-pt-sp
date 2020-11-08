@@ -55,6 +55,7 @@ public class Main {
 			switch (volba)
 			{
 				case 1: //[1] - Spusteni zakladni simulace
+					System.out.println("Simulace:");
 					simulace();
 					break;
 					
@@ -64,6 +65,7 @@ public class Main {
 			}
 		}
 	}
+	
 	
 	/**
 	 * Metoda nacte a inicializuje potrebna data a zavola simulaci
@@ -90,7 +92,7 @@ public class Main {
 	 * @param soubor
 	 */
 	public static void inicializace(ReadFrom soubor) {
-		nacteniDat(soubor); //inicializace dat (vybrani-vycisteni dat ze souboru, rozdeleni do konkretnich matic)
+		nacteniAinicializaceDat(soubor); //inicializace dat (vybrani-vycisteni dat ze souboru, rozdeleni do konkretnich matic)
 		
 		System.out.println("D " + pocetD);
 		System.out.println("S " + pocetS);
@@ -111,7 +113,7 @@ public class Main {
 	 * Metoda nacte data ze souboru a rozdeli seznam nactenych dat do danych matic 
 	 * @param soubor Soubor ze ktereho se nacitaji data
 	 */
-	public static void nacteniDat(ReadFrom soubor) {
+	public static void nacteniAinicializaceDat(ReadFrom soubor) {
 		//pole stringu obsahuje vycistena data ze souboru
 		//PROC LINKEDLIST (A NE ARRAYLIST)? LINKEDLIST MA OPERACE GETFIRST A REMOVEFIRST V O(1) 
 			// ARRAYLIST MA JEN GET A REMOVE V O(n)
@@ -166,7 +168,7 @@ public class Main {
 	}
 	
 	/**
-	 * Metoda rozdeli souhrnnou matici produkci tovaren, vytvori instance Tovaren s prislusnymi atributy
+	 * Metoda rozdeli souhrnnou matici produkci tovaren, vytvori instance Tovaren s prislusnymi atributy a vlozi je do seznamu tovaren
 	 */
 	public static void inicializaceTovaren(){
 		tovarny = new ArrayList<Tovarna>(pocetD);
@@ -191,7 +193,7 @@ public class Main {
 	}
 	
 	/**
-	 * Metoda rozdeli souhrnnou matici poptavek supermarketu, vytvori instance Supermarket s prislusnymi atributy
+	 * Metoda rozdeli souhrnnou matici poptavek a poc sklad. zasob supermarketu, vytvori instance Supermarket s prislusnymi atributy a vlozi je do seznamu S 
 	 */
 	public static void inicializaceSupermarketu() {
 		supermarkety = new ArrayList<Supermarket>(pocetS);
@@ -228,7 +230,7 @@ public class Main {
 	public static String menu() {
 		String menu = "";
 		menu += "Menu\n";
-		menu += "[1] Spustit zakladni simulaci\n";
+		menu += "[1] Spustit simulaci\n";
 		menu += "[2] EXIT\n";
 		menu += "-------------------------\n";
 		menu += "Volba: ";
@@ -244,7 +246,7 @@ public class Main {
 		try{
 		    input = Integer.parseInt(user.nextLine());
 		} catch(NumberFormatException ex){ 
-		    System.err.print("Not a number. ");
+		    System.err.print("Zadejte cislo. ");
 		    input = -1;
 		}
 		return input;

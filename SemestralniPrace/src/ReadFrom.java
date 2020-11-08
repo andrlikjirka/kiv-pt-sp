@@ -40,7 +40,7 @@ public class ReadFrom {
 				if (line.charAt(0)=='#') { //ignorovani radky zacinajici krizkem
 					continue;
 				}
-				data.add(line);	//do seznamu Stringu pridam nactenou radku
+				data.addLast(line); //na konec seznamu Stringu pridam nactenou radku
 			}
 		} catch (IOException e) {
 			System.err.println("Nelze cist ze souboru: " + nazevSouboru + ". Zkontrolujte nazev souboru.");

@@ -57,7 +57,7 @@ public class Supermarket {
 	}
 	
 	/**
-	 * Getr atributu poptavky	
+	 * Getr vrati hodnotu atributu poptavky po druhu zbozi v den 	
 	 * @param den Den
 	 * @param druhZbozi Druh zbozi
 	 * @return hodnota poptavky po druhu zbozi v den
@@ -66,6 +66,44 @@ public class Supermarket {
 		return poptavka[den][druhZbozi];
 	}
 	
+	/**
+	 * Setr snizi hodnotu poptavky po druhu zbozi v den 
+	 * @param den Den
+	 * @param druhZbozi Druh zbozi
+	 * @param zmena Hodnota o kterou se snizi poptavka
+	 */
+	public void setSnizeniPoptavky(int den, int druhZbozi, int zmena) {
+		poptavka[den][druhZbozi] -= zmena;
+	}
+	
+	/**
+	 * Getr vrati hodnotu skladovych zasob druhu zbozi
+	 * @param druhZbozi Druh Zbozi
+	 * @return hodnota skladovych zasob druhu zbozi
+	 */
+	public int getSkladoveZasoby(int druhZbozi) {
+		return sklad[druhZbozi];
+	}
+
+	/**
+	 * Setr snizi hodnotu skladovych zasob druhu zbozi 
+	 * @param druhZbozi Druh zbozi
+	 * @param zmena Hodnota o kterou se snizi skladove zasoby
+	 */
+	public void setSnizeniSkladZasob(int druhZbozi, int zmena) {
+		sklad[druhZbozi] -= zmena;
+	}
+
+	/**
+	 * Getr vrati hodnotu mnozstvi ks ktere potrebuje supermarket koupit od D za cele obdobi
+	 * @param druhZbozi Druh zbozi
+	 * @return Hodnota mnozstvi ks ktere potrebuje supermarket koupit od D za cele obdobi
+	 */
+	public int getPotrebujeKoupitMesic(int druhZbozi) {
+		return potrebujeKoupitMesic[druhZbozi];
+	}
+
+
 	/** Metoda vypise atributy instance tridy Supermarket */
 	@Override
 	public String toString() {
