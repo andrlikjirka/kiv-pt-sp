@@ -42,6 +42,14 @@ public class Tovarna {
 		return produkce[den][druhZbozi];
 	}
 	
+	/**
+	 * Getr vrati pole produkce v posledni den (zbytky co se neprodaly)
+	 * @return Jednorozmerne pole produkci v posledni den 
+	 */
+	public int[] getZbytekProdukcePoslDen() {
+		return produkce[produkce.length-1];
+	}
+	
 	/** 
 	 * Setr snizi hodnotu produkce druhu zbozi v den o urcitou hodnotu (zmenu)
 	 * @param den Den

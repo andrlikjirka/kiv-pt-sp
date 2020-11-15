@@ -14,8 +14,12 @@ import java.util.Scanner;
 public class Main {
 	/** Nazev vstupniho souboru */
 	public static final String NAZEV_VSTUPNIHO_SOUBORU = "vstupni-data/test_optim.txt";
-	/** Nazev vystupniho souboru - pro hlavni vystup simulace rozvozu vyrobku */
-	public static final String NAZEV_VYSTUPU = "vystup-soubory/output.txt";
+	/** Nazev vystupniho souboru - prehled tovaren a rozvozu */
+	public static final String NAZEV_PREHLEDU_TOV = "vystup-soubory/prehledTovaren.txt";
+	/** Nazev vystupniho souboru - kazdodenni prehled skladovych zasob supermarketu */
+	public static final String NAZEV_PREHLEDU_SKLADU = "vystup-soubory/prehledSkladu.txt";
+	/** Nazev vystupniho souboru - vystup simulace (doba, celk. cena) */
+	public static final String NAZEV_VYSTUPU_SIMULACE = "vystup-soubory/vystup-simulace.txt";
 	/** Pocet voleb v menu */
 	public final static int POCET_VOLEB_MENU = 2;
 	
@@ -74,15 +78,17 @@ public class Main {
 		ReadFrom vstup = new ReadFrom(NAZEV_VSTUPNIHO_SOUBORU);
 		inicializace(vstup); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
 		
-		PrintTo vystup = new PrintTo(NAZEV_VYSTUPU);
+		PrintTo prehledTov = new PrintTo(NAZEV_PREHLEDU_TOV);
+		PrintTo prehledSklad = new PrintTo(NAZEV_PREHLEDU_SKLADU);
+		PrintTo vystupSim = new PrintTo(NAZEV_VYSTUPU_SIMULACE);
 		
 		long start = System.currentTimeMillis();
 
-		Simulace s = new Simulace(vystup, tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
+		Simulace s = new Simulace(prehledTov, prehledSklad, vystupSim, tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
 		s.startSimulation();
 	
 		long konec = System.currentTimeMillis();
-		System.out.println("\ncas simulace: " + (konec-start) + "ms\n");
+		vystupSim.zapisDoSouboru("\ncas simulace: " + (konec-start) + "ms\n");
 		System.out.println("=========================");
 
 	}

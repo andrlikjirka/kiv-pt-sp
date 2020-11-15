@@ -103,6 +103,9 @@ public class Supermarket {
 		return potrebujeKoupitMesic[druhZbozi];
 	}
 
+	public String skladToString() {
+		return (Arrays.toString(sklad));
+	}
 
 	/** Metoda vypise atributy instance tridy Supermarket */
 	@Override
