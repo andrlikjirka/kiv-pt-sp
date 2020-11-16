@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -10,6 +9,7 @@ import java.util.Scanner;
 /**
  * Hlavni trida programu obsahujici spousteci kod programu
  * @author jandrlik
+ * @author kmotycko
  */
 public class Main {
 	/** Nazev vstupniho souboru */
@@ -20,6 +20,8 @@ public class Main {
 	public static final String NAZEV_PREHLEDU_SKLADU = "vystup-soubory/prehledSkladu.txt";
 	/** Nazev vystupniho souboru - vystup simulace (doba, celk. cena) */
 	public static final String NAZEV_VYSTUPU_SIMULACE = "vystup-soubory/vystup-simulace.txt";
+	/** Nazve vystupniho souboru - dovoz z Ciny */
+	public static final String NAZEV_VYSTUPU_CINA = "vystup-soubory/vystup-cina.txt";
 	/** Pocet voleb v menu */
 	public final static int POCET_VOLEB_MENU = 2;
 	
@@ -45,7 +47,7 @@ public class Main {
 	/** Seznam supermarketu */
 	public static ArrayList<Supermarket> supermarkety;
 	
-	/** Scanner pro uzivatelsky vstup */
+	/** Scanner pro uzivatelsky vstup */ 
 	public static Scanner user = new Scanner(System.in);
 	
 	/**
@@ -70,7 +72,6 @@ public class Main {
 		}
 	}
 	
-	
 	/**
 	 * Metoda nacte a inicializuje potrebna data a zavola simulaci
 	 */
@@ -81,10 +82,11 @@ public class Main {
 		PrintTo prehledTov = new PrintTo(NAZEV_PREHLEDU_TOV);
 		PrintTo prehledSklad = new PrintTo(NAZEV_PREHLEDU_SKLADU);
 		PrintTo vystupSim = new PrintTo(NAZEV_VYSTUPU_SIMULACE);
+		PrintTo vystupCina = new PrintTo(NAZEV_VYSTUPU_CINA);
 		
 		long start = System.currentTimeMillis();
 
-		Simulace s = new Simulace(prehledTov, prehledSklad, vystupSim, tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
+		Simulace s = new Simulace(prehledTov, prehledSklad, vystupSim, vystupCina, tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
 		s.startSimulation();
 	
 		long konec = System.currentTimeMillis();
@@ -104,11 +106,7 @@ public class Main {
 		System.out.println("S " + pocetS);
 		System.out.println("Z " + pocetZ);
 		System.out.println("T " + pocetT);
-		
-		System.out.println("\nc " + Arrays.deepToString(cenyPrevozu));
-		//System.out.println("q " + Arrays.deepToString(pocZasoby));
-		//System.out.println("p " + Arrays.deepToString(produkceD));
-		//System.out.println("r " + Arrays.deepToString(poptavkyS));
+		//System.out.println("\nc " + Arrays.deepToString(cenyPrevozu));
 		System.out.println();
 		
 		inicializaceTovaren();
@@ -121,8 +119,6 @@ public class Main {
 	 */
 	public static void nacteniAinicializaceDat(ReadFrom soubor) {
 		//pole stringu obsahuje vycistena data ze souboru
-		//PROC LINKEDLIST (A NE ARRAYLIST)? LINKEDLIST MA OPERACE GETFIRST A REMOVEFIRST V O(1) 
-			// ARRAYLIST MA JEN GET A REMOVE V O(n)
 		LinkedList<String> nacteni = soubor.nactiData();
 		//1. radku vyberu a odeberu (vytvorim z ni pole pro inicialiazci hodnot)
 		String[] radkaInicializace = nacteni.getFirst().split(" ");

@@ -7,7 +7,9 @@ import java.util.Arrays;
 /**
  * Trida reprezentujici tovarnu
  * @author jandrlik
+ * @author kmotycko
  */
+
 public class Tovarna {
 	/** Atribut - ID tovarny (identifikator) */
 	private int ID;

@@ -5,6 +5,7 @@
 /**
  * Trida reprezentujici uzel ve stromu
  * @author jandrlik
+ * @author kmotycko
  */
 public class Node {
 	/** Klic uzlu */
@@ -22,5 +23,5 @@ public class Node {
 	public Node (int key, int ID) {
 		this.key = key;
 		this.ID = ID;
-	}
+	}	
 }

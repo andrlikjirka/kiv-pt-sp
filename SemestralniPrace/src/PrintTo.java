@@ -7,7 +7,7 @@ import java.io.PrintStream;
 
 /**
  * Trida zajistujici zapis dat do souboru
- * @author Jirka Andrlík
+ * @author jandrlik, kmotycko 
  */
 public class PrintTo {
 	/**	PrintStream pro zapis vystupu*/
@@ -32,6 +32,6 @@ public class PrintTo {
 	 * @param line String retezec predany k zapsani do souboru
 	 */
 	public void zapisDoSouboru(String line) {
-		vystup.println(line);
+		vystup.print(line);
 	}
 }

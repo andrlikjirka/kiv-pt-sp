@@ -7,6 +7,7 @@ import java.util.Arrays;
 /**
  * Trida reprezentujici supermarket
  * @author jandrlik
+ * @author kmotycko
  */
 public class Supermarket {
 	/** Atribut - ID supermarketu (identifikator) */

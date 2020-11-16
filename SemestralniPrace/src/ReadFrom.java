@@ -10,7 +10,8 @@ import java.util.Scanner;
 
 /**
  * Trida zajistujici cteni ze souboru
- * @author Jirka Andrlík
+ * @author jandrlik
+ * @author kmotycko
  */
 public class ReadFrom {
 	/** Scanner pro cteni ze vstupniho souboru */

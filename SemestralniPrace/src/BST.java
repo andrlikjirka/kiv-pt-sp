@@ -5,6 +5,7 @@
 /**
  * Trida reprezentujici binarni vyhledavaci strom
  * @author jandrlik
+ * @author kmotycko
  */
 public class BST {
 	/**	Koren stromu */
@@ -24,10 +25,12 @@ public class BST {
 	 */
 	public void add(int key, int ID) {
 		counterNodes++;
-		if (root == null) // debug ==; jedno = je prirazeni, dve == porovnani
-			root = new Node(key, ID);
-		else
+		if (root == null) {
+			root = new Node(key, ID); 
+		}
+		else {
 			addUnder(root, key, ID);
+		}
 	}
 
 	/**
@@ -39,64 +42,49 @@ public class BST {
 	private void addUnder(Node n, int key, int ID) {
 		if (key < n.key) {
 			// uzel patri doleva, je tam misto?
-			if (n.left == null)
+			if (n.left == null) {
 				n.left = new Node(key, ID);
-			else
+			}
+			else {
 				addUnder(n.left, key, ID); // debug: novy uzel se vlozi pod n.left
+			}
 		} else {
 			// uzel patri doprava, je tam misto?
-			if (n.right == null)
+			if (n.right == null) {
 				n.right = new Node(key, ID);
-			else
+			}
+			else {
 				addUnder(n.right, key, ID); // debug: novy uzel se vlozi pod n.right
+			}
 		}
 	}
 
-	/** Metoda odstrani uzel s min klicem */
 	public void removeMin() {
-		remove("min");
-	}
-	
-	/** Metoda odstrani uzel s max klicem */
-	public void removeMax() {
-		remove("max");
-	}
-	
-	/**
-	 * Metoda odstrani uzel z BST
-	 * @param minMax rozliseni, zda bude odstranen uzel s min nebo max klicem
-	 */
-	private void remove(String minMax) {
 		counterNodes--;
 		Node n = root; // n = odebirany vrchol
 		Node ancestor = null; // predek odebiraneho uzlu
 		
-		if (minMax.equals("max")) {
-			while (n.right != null) {
-				ancestor = n;
-				n = n.right;
-			} 
-		} else if (minMax.equals("min")) {
-			while (n.left != null) {
-				ancestor = n;
-				n = n.left;
-			}
-		} else {
-			n = null; 
-			ancestor = null;
+		while (n.left != null) {
+			ancestor = n;
+			n = n.left;
 		}
+		
 		// na konci smycky n ukazuje na vrchol ktery chceme odebrat
 		
 		if ((n.left == null) || (n.right == null)) {
 			Node replacement = n.left;
-			if (n.right != null)
+			if (n.right != null) {
 				replacement = n.right;
-			if (ancestor == null)
+			}
+			if (ancestor == null) {
 				root = replacement;
-			else if (ancestor.left == n)
+			}
+			else if (ancestor.left == n) {
 				ancestor.left = replacement;
-			else
+			}
+			else {
 				ancestor.right = replacement;
+			}
 		} else {
 			Node leftMax = n.left;
 			Node leftMaxAncestor = n;
@@ -106,10 +94,56 @@ public class BST {
 			}
 			n.key = leftMax.key;
 			n.ID = leftMax.ID;
-			if (leftMax != n.left)
+			if (leftMax != n.left) {
 				leftMaxAncestor.right = leftMax.left;
-			else
+			}
+			else {
 				n.left = leftMax.left;
+			}
+		}
+	}
+	
+	public void removeMax() {
+		counterNodes--;
+		Node n = root; // n = odebirany vrchol
+		Node ancestor = null; // predek odebiraneho uzlu
+		
+		while (n.right != null) {
+			ancestor = n;
+			n = n.right;
+		} 
+		
+		// na konci smycky n ukazuje na vrchol ktery chceme odebrat
+		
+		if ((n.left == null) || (n.right == null)) {
+			Node replacement = n.left;
+			if (n.right != null) {
+				replacement = n.right;
+			}
+			if (ancestor == null) {
+				root = replacement;
+			}
+			else if (ancestor.left == n) {
+				ancestor.left = replacement;
+			}
+			else {
+				ancestor.right = replacement;
+			}
+		} else {
+			Node leftMax = n.left;
+			Node leftMaxAncestor = n;
+			while (leftMax.right != null) {
+				leftMaxAncestor = leftMax;
+				leftMax = leftMax.right;
+			}
+			n.key = leftMax.key;
+			n.ID = leftMax.ID;
+			if (leftMax != n.left) {
+				leftMaxAncestor.right = leftMax.left;
+			}
+			else {
+				n.left = leftMax.left;
+			}
 		}
 	}
 	
@@ -139,7 +173,9 @@ public class BST {
 		if (n.right != null) {
 			return getMaxNode(n.right);
 		}
-		else return n;
+		else {
+			return n;
+		}
 	}
 	
 	/**
@@ -167,7 +203,9 @@ public class BST {
 		if (n.left != null) {
 			return getMinNode(n.left);
 		} 
-		else return n;
+		else {
+			return n;
+		}
 	}
 	
 	/**
