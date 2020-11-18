@@ -14,16 +14,18 @@ public class Tovarna {
 	/** Atribut - ID tovarny (identifikator) */
 	private int ID;
 	/** Atribut - matice produkci (po vsech druzich zbozi ve vsechny dny) */
-	public int[][] produkce;
+	private int[][] produkce;
 	
 	/**
 	 *  Konstruktor vytvari instance tridy
 	 * @param iD ID tovarny
 	 * @param produkce matice produkci 
 	 */
-	public Tovarna(int iD, int[][] produkce) {	
-		this.ID = iD;
-		this.produkce = produkce;
+	public Tovarna(int iD, int[][] produkce) {
+		if (iD != 0 && produkce != null) {
+			this.ID = iD;
+			this.produkce = produkce;
+		}
 	}
 	
 	/** 
@@ -33,7 +35,7 @@ public class Tovarna {
 	public int getID() {
 		return ID;
 	}
-
+	
 	/**
 	 *  Getr atributu produkce daneho druhu zbozi v dany den 
 	 * @param den Den
@@ -60,6 +62,16 @@ public class Tovarna {
 	 */
 	public void setSnizeniProdukce(int den, int druhZbozi, int zmena) {
 		produkce[den][druhZbozi] -= zmena;
+	}
+	
+	/**
+	 * Setr zvysi hodnotu produkce druhu zbozi v den o urcitou hodnotu (zmenu)
+	 * @param den Den
+	 * @param druhZbozi Druh zbozi
+	 * @param zmena Hodnota o kterou se zvysi hodnota produkce
+	 */
+	public void setZvyseniProdukce(int den, int druhZbozi, int zmena) {
+		produkce[den][druhZbozi] += zmena;
 	}
 	
 	/** Metoda vypise atributy instance tridy Tovarna */

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -14,14 +15,8 @@ import java.util.Scanner;
 public class Main {
 	/** Nazev vstupniho souboru */
 	public static final String NAZEV_VSTUPNIHO_SOUBORU = "vstupni-data/test_optim.txt";
-	/** Nazev vystupniho souboru - prehled tovaren a rozvozu */
-	public static final String NAZEV_PREHLEDU_TOV = "vystup-soubory/prehledTovaren.txt";
-	/** Nazev vystupniho souboru - kazdodenni prehled skladovych zasob supermarketu */
-	public static final String NAZEV_PREHLEDU_SKLADU = "vystup-soubory/prehledSkladu.txt";
 	/** Nazev vystupniho souboru - vystup simulace (doba, celk. cena) */
 	public static final String NAZEV_VYSTUPU_SIMULACE = "vystup-soubory/vystup-simulace.txt";
-	/** Nazve vystupniho souboru - dovoz z Ciny */
-	public static final String NAZEV_VYSTUPU_CINA = "vystup-soubory/vystup-cina.txt";
 	/** Pocet voleb v menu */
 	public final static int POCET_VOLEB_MENU = 2;
 	
@@ -43,12 +38,14 @@ public class Main {
 	public static int[][] poptavkyS;
 	
 	/** Seznam tovaren */
-	public static ArrayList<Tovarna> tovarny;
+	public static List<Tovarna> tovarny;
 	/** Seznam supermarketu */
-	public static ArrayList<Supermarket> supermarkety;
+	public static List<Supermarket> supermarkety;
 	
 	/** Scanner pro uzivatelsky vstup */ 
 	public static Scanner user = new Scanner(System.in);
+	/**	Seznam nactenych dat (vyfiltrovanych) */
+	public static LinkedList<String> nactenaData;
 	
 	/**
 	 * Hlavni metoda (vstupni bod programu)
@@ -68,6 +65,9 @@ public class Main {
 				case 2: //[2] - Exit
 					System.out.println("_________________________\nProgram ukoncen.");
 					break out;
+				
+				default:
+					System.exit(0);
 			}
 		}
 	}
@@ -77,52 +77,40 @@ public class Main {
 	 */
 	public static void simulace() {
 		ReadFrom vstup = new ReadFrom(NAZEV_VSTUPNIHO_SOUBORU);
-		inicializace(vstup); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
-		
-		PrintTo prehledTov = new PrintTo(NAZEV_PREHLEDU_TOV);
-		PrintTo prehledSklad = new PrintTo(NAZEV_PREHLEDU_SKLADU);
-		PrintTo vystupSim = new PrintTo(NAZEV_VYSTUPU_SIMULACE);
-		PrintTo vystupCina = new PrintTo(NAZEV_VYSTUPU_CINA);
-		
-		long start = System.currentTimeMillis();
+		PrintTo vystupSimulace = new PrintTo(NAZEV_VYSTUPU_SIMULACE);
+		nacteni(vstup); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
 
-		Simulace s = new Simulace(prehledTov, prehledSklad, vystupSim, vystupCina, tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
-		s.startSimulation();
-	
+		long start = System.currentTimeMillis();
+		Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
+		int celkovaCena = s.startSimulation();
 		long konec = System.currentTimeMillis();
-		vystupSim.zapisDoSouboru("\ncas simulace: " + (konec-start) + "ms\n");
+		
+		vystupSimulace.zapisDoSouboru("Celkova cena prepravy za cele obdobi = " + celkovaCena);	
+		vystupSimulace.zapisDoSouboru("\n\nCas simulace: " + (konec-start) + "ms");
 		System.out.println("=========================");
 
 	}
 	
 	/**
-	 * Metoda zavola nacteni dat a inicializaci dat pro tovarny a supermarkety
-	 * @param soubor
+	 * Metoda vola potrebne metody pro nacteni a inicializaci dat
+	 * @param soubor Soubor ze ktereho probiha cteni dat
 	 */
-	public static void inicializace(ReadFrom soubor) {
-		nacteniAinicializaceDat(soubor); //inicializace dat (vybrani-vycisteni dat ze souboru, rozdeleni do konkretnich matic)
-		
-		System.out.println("D " + pocetD);
-		System.out.println("S " + pocetS);
-		System.out.println("Z " + pocetZ);
-		System.out.println("T " + pocetT);
-		//System.out.println("\nc " + Arrays.deepToString(cenyPrevozu));
-		System.out.println();
-		
-		inicializaceTovaren();
-		inicializaceSupermarketu();
+	public static void nacteni(ReadFrom soubor) {
+		//seznam stringu obsahuje vycistena data ze souboru
+		nactenaData = soubor.nactiData();
+		//1. radku vyberu a odeberu (vytvorim z ni pole pro inicialiazci hodnot)
+		radkaInicializace();		
+		rozdeleniDatDoSouhrnMatic();
+		inicializaceTovarenSupermarketu(); //rozdeleni do matic poptavek a produkci
 	}
 	
 	/**
-	 * Metoda nacte data ze souboru a rozdeli seznam nactenych dat do danych matic 
-	 * @param soubor Soubor ze ktereho se nacitaji data
+	 * Metoda vybere z nactenych dat inicializacni radku s potrebnymi hodnotami (pocetD, pocetS, pocetZ, pocetT)
+	 * @param nactenaData Seznam nactenych dat
 	 */
-	public static void nacteniAinicializaceDat(ReadFrom soubor) {
-		//pole stringu obsahuje vycistena data ze souboru
-		LinkedList<String> nacteni = soubor.nactiData();
-		//1. radku vyberu a odeberu (vytvorim z ni pole pro inicialiazci hodnot)
-		String[] radkaInicializace = nacteni.getFirst().split(" ");
-		nacteni.removeFirst();
+	public static void radkaInicializace() {
+		String[] radkaInicializace = nactenaData.getFirst().split(" ");
+		nactenaData.removeFirst();
 		
 		int[] inicializace = new int[radkaInicializace.length];
 		for (int i = 0; i < radkaInicializace.length; i++){
@@ -132,41 +120,57 @@ public class Main {
 		pocetS = inicializace[1];
 		pocetZ = inicializace[2];
 		pocetT = inicializace[3];
+		System.out.println("D " + pocetD);
+		System.out.println("S " + pocetS);
+		System.out.println("Z " + pocetZ);
+		System.out.println("T " + pocetT);
+		System.out.println();
+	}
 	
+	/**
+	 * Metoda rozdeli nactena data do souhrnnych matic
+	 * @param nacteni Seznam nactenych dat
+	 */
+	public static void rozdeleniDatDoSouhrnMatic() {
 		//vytvoreni matic pro data (ceny prevozu, pocatecni zasoby S, produkce D, poptavka S), rozmery dle vstupniho souboru
 		cenyPrevozu = new int[pocetD][pocetS];
 		pocZasoby = new int[pocetZ][pocetS];
 		produkceD = new int[pocetZ*pocetT][pocetD];
 		poptavkyS = new int[pocetZ*pocetT][pocetS];
 		for (int d = 0; d < pocetD; d ++) { //inicializace pole cen prevozu
-			String[] line = nacteni.getFirst().split(" "); //vzdy prvni radku rozdelim do pole Stringu - kazda hodnota je na svem miste v poli
-			nacteni.removeFirst();
+			String[] line = nactenaData.getFirst().split(" "); //vzdy prvni radku rozdelim do pole Stringu - kazda hodnota je na svem miste v poli
+			nactenaData.removeFirst();
 			for (int s = 0; s < line.length; s++) {
 				cenyPrevozu[d][s] = Integer.parseInt(line[s]); //preparsovane hodnoty vlozim do vysledneho intoveho pole cenProvozu
  			}
 		}
 		for (int z = 0; z < pocetZ; z ++) { //inicializace pole pocatecnich zasob S
-			String[] line = nacteni.getFirst().split(" ");
-			nacteni.removeFirst();
+			String[] line = nactenaData.getFirst().split(" ");
+			nactenaData.removeFirst();
 			for (int s = 0; s < line.length; s++) {
 				pocZasoby[z][s] = Integer.parseInt(line[s]);
  			}
 		}
 		for (int i = 0; i < (pocetZ*pocetT); i++) { //inicializace pole produkce tovaren
-			String[] line = nacteni.getFirst().split(" ");
-			nacteni.removeFirst();
+			String[] line = nactenaData.getFirst().split(" ");
+			nactenaData.removeFirst();
 			for (int j = 0; j < line.length; j++) {
 				produkceD[i][j] = Integer.parseInt(line[j]);
 			}
 		}
 		for (int i = 0; i < (pocetZ*pocetT); i++) { //inicializace pole poptavek zakazniku S
-			String[] line = nacteni.getFirst().split(" ");
-			nacteni.removeFirst();
+			String[] line = nactenaData.getFirst().split(" ");
+			nactenaData.removeFirst();
 			for (int j = 0; j < line.length; j++) {
 				poptavkyS[i][j] = Integer.parseInt(line[j]);
 			}
 		}
-		nacteni = null;
+	}
+	
+	/**	Metoda vola inicializace Tovaren a Supermarketu */
+	public static void inicializaceTovarenSupermarketu() {
+		inicializaceTovaren();
+		inicializaceSupermarketu();
 	}
 	
 	/**

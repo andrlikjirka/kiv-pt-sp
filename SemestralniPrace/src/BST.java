@@ -14,6 +14,10 @@ public class BST {
 	/** Pocitadlo vrcholu */
 	private int counterNodes = 0; 
 
+	/**
+	 * Getr vrati pocet uzlu stromu
+	 * @return
+	 */
 	public int getCounterNodes() {
 		return counterNodes;
 	}
@@ -59,6 +63,7 @@ public class BST {
 		}
 	}
 
+	/**	Metoda odstrani min uzel */
 	public void removeMin() {
 		counterNodes--;
 		Node n = root; // n = odebirany vrchol
@@ -70,39 +75,10 @@ public class BST {
 		}
 		
 		// na konci smycky n ukazuje na vrchol ktery chceme odebrat
-		
-		if ((n.left == null) || (n.right == null)) {
-			Node replacement = n.left;
-			if (n.right != null) {
-				replacement = n.right;
-			}
-			if (ancestor == null) {
-				root = replacement;
-			}
-			else if (ancestor.left == n) {
-				ancestor.left = replacement;
-			}
-			else {
-				ancestor.right = replacement;
-			}
-		} else {
-			Node leftMax = n.left;
-			Node leftMaxAncestor = n;
-			while (leftMax.right != null) {
-				leftMaxAncestor = leftMax;
-				leftMax = leftMax.right;
-			}
-			n.key = leftMax.key;
-			n.ID = leftMax.ID;
-			if (leftMax != n.left) {
-				leftMaxAncestor.right = leftMax.left;
-			}
-			else {
-				n.left = leftMax.left;
-			}
-		}
+		this.remove(n, ancestor);
 	}
 	
+	/**	Metoda odstrani max uzel */
 	public void removeMax() {
 		counterNodes--;
 		Node n = root; // n = odebirany vrchol
@@ -112,9 +88,16 @@ public class BST {
 			ancestor = n;
 			n = n.right;
 		} 
-		
 		// na konci smycky n ukazuje na vrchol ktery chceme odebrat
-		
+		this.remove(n, ancestor);
+	}
+	
+	/**
+	 * Metoda zajistujici odstraneni prvku (spolecna pro removeMax i removeMin)
+	 * @param n Odstranovany vrchol
+	 * @param ancestor Predek
+	 */
+	private void remove(Node n, Node ancestor) {
 		if ((n.left == null) || (n.right == null)) {
 			Node replacement = n.left;
 			if (n.right != null) {

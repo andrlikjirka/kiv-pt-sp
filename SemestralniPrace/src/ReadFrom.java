@@ -15,14 +15,16 @@ import java.util.Scanner;
  */
 public class ReadFrom {
 	/** Scanner pro cteni ze vstupniho souboru */
-	private String nazevSouboru;
+	private String nazevSouboru = null;
 	
 	/**
 	 * Konstruktor vytvori novou instanci tridy nacitajici ze souboru 
 	 * @param nazevSouboru nazev souboru, ze ktereho bude probihat cteni
 	 */
 	public ReadFrom(String nazevSouboru) {
-		this.nazevSouboru = nazevSouboru;
+		if (!nazevSouboru.isEmpty()) {
+			this.nazevSouboru = nazevSouboru;
+		}
 	}
 	
 	/**
@@ -32,7 +34,6 @@ public class ReadFrom {
 	public LinkedList<String> nactiData() {
 		LinkedList<String> data = new LinkedList<String>();
 		try (Scanner vstup = new Scanner(Paths.get(nazevSouboru))){
-			
 			while(vstup.hasNextLine()) {
 				String line = vstup.nextLine(); //nacteni radky
 				if (line.equals("")) { //ignorovani prazdne radky
@@ -41,7 +42,7 @@ public class ReadFrom {
 				if (line.charAt(0)=='#') { //ignorovani radky zacinajici krizkem
 					continue;
 				}
-				data.addLast(line); //na konec seznamu Stringu pridam nactenou radku
+				data.add(line); //na konec seznamu Stringu pridam nactenou radku
 			}
 		} catch (IOException e) {
 			System.err.println("Nelze cist ze souboru: " + nazevSouboru + ". Zkontrolujte nazev souboru.");

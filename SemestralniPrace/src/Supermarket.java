@@ -13,11 +13,11 @@ public class Supermarket {
 	/** Atribut - ID supermarketu (identifikator) */
 	private int ID;
 	/** Atribut - matice poptavky (po vsech druzich zbozi ve vsechny dny) */
-	public int[][] poptavka;
+	private int[][] poptavka;
 	/** Atribut - pole skladu (na zacatku simulace obsahuje hodnoty pocatecnich zasob vsech druhu zbozi) */
-	public int[] sklad;
+	private int[] sklad;
 	/** Atribut - hodnota kolik ks druhu vyrobku potrebuje supermarket za mesic koupit (celk popt - poc zasoby) */
-	public int[] potrebujeKoupitMesic;
+	private int[] potrebujeKoupitObdobi;
 	
 	/**
 	 * Konstruktor vytvari instance tridy supermarket
@@ -26,10 +26,12 @@ public class Supermarket {
 	 * @param sklad pole ks druhu zbozi na sklade
 	 */
 	public Supermarket(int iD, int[][] poptavka, int[] sklad) {
-		ID = iD;
-		this.poptavka = poptavka;
-		this.sklad = sklad;
-		this.potrebujeKoupitMesic = potrebujeKoupitM();
+		if (iD != 0 && poptavka != null && sklad != null) {
+			ID = iD;
+			this.poptavka = poptavka;
+			this.sklad = sklad;
+			this.potrebujeKoupitObdobi = potrebujeKoupitM();
+		}	
 	}
 	
 	/**
@@ -85,7 +87,7 @@ public class Supermarket {
 	public int getSkladoveZasoby(int druhZbozi) {
 		return sklad[druhZbozi];
 	}
-
+	
 	/**
 	 * Setr snizi hodnotu skladovych zasob druhu zbozi 
 	 * @param druhZbozi Druh zbozi
@@ -100,10 +102,23 @@ public class Supermarket {
 	 * @param druhZbozi Druh zbozi
 	 * @return Hodnota mnozstvi ks ktere potrebuje supermarket koupit od D za cele obdobi
 	 */
-	public int getPotrebujeKoupitMesic(int druhZbozi) {
-		return potrebujeKoupitMesic[druhZbozi];
+	public int getPotrebujeKoupitZaObdobi(int druhZbozi) {
+		return potrebujeKoupitObdobi[druhZbozi];
 	}
-
+	
+	/**
+	 * Setr snizi hodnotu kolik ks druhu zbozi potrebuje supermarket koupit od tovaren za cele obdobi
+	 * @param druhZbozi Druh zbozi
+	 * @param zmena Hodnota o kterou se snizi kolik sup potrebuje koupit za obdobi
+	 */
+	public void setSnizeniPotrebujeKoupitZaObdobi(int druhZbozi, int zmena) {
+		potrebujeKoupitObdobi[druhZbozi] -= zmena;
+	}
+	
+	/**
+	 * Metoda vypise skladove zasoby druhu zbozi jako retezec
+	 * @return Retezec ve kterem jsou vypsany skladove zasoby
+	 */
 	public String skladToString() {
 		return (Arrays.toString(sklad));
 	}

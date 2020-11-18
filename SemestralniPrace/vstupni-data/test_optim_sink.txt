@@ -18,7 +18,7 @@
 #    .      .      .    .
 # c_{1,D} c_{2,D} ... c_{S,D}
 1 2 0
-2 1 0
+2 1 0 
 
 # BLOK: Pocatecni skladove zasoby q_{z,s}
 #
