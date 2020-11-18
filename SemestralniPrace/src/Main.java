@@ -58,7 +58,7 @@ public class Main {
 			switch (volba)
 			{
 				case 1: //[1] - Spusteni zakladni simulace
-					System.out.println("Simulace:");
+					System.out.println("Spusteni simulace:");
 					simulace();
 					break;
 					
@@ -120,11 +120,11 @@ public class Main {
 		pocetS = inicializace[1];
 		pocetZ = inicializace[2];
 		pocetT = inicializace[3];
-		System.out.println("D " + pocetD);
-		System.out.println("S " + pocetS);
-		System.out.println("Z " + pocetZ);
-		System.out.println("T " + pocetT);
-		System.out.println();
+		//System.out.println("D " + pocetD);
+		//System.out.println("S " + pocetS);
+		//System.out.println("Z " + pocetZ);
+		//System.out.println("T " + pocetT);
+		//System.out.println();
 	}
 	
 	/**

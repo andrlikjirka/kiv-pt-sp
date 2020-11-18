@@ -170,7 +170,7 @@ public class Simulace {
 	 * @param druhZbozi Aktualni druh zbozi
 	 * @return Vytvoreny strom poptavek
 	 */
-	public BST vytvoreniStromuPoptavek(int den, int druhZbozi) {
+	private BST vytvoreniStromuPoptavek(int den, int druhZbozi) {
 		BST sup = new BST();
 		for (int s = 0; s < supermarkety.size(); s++) { // sestaveni stromu pro urceni nejvyssi poptavky
 			int popt = supermarkety.get(s).getPoptavka(den, druhZbozi);
@@ -188,7 +188,7 @@ public class Simulace {
 	 * @param druhZbozi Aktualni druh zbozi
 	 * @return Vytvoreny strom cen cest
 	 */
-	public BST vytvoreniStromuCenDS(int supermarketSnejPoptID, int den, int druhZbozi) {
+	private BST vytvoreniStromuCenDS(int supermarketSnejPoptID, int den, int druhZbozi) {
 		BST cenyDS = new BST();
 		for (int d = 0; d < pocetD; d++) { // sestaveni stromu pro urceni tovarny s nejlevnejsi cenou
 			int cena = cenyPrevozu[d][supermarketSnejPoptID - 1];
@@ -396,7 +396,7 @@ public class Simulace {
 	 * @param den Aktualni den
 	 * @param druhZbozi Aktualni druh zbozi
 	 */
-	public void uspokojenizCiny(int tovarnaID, int supermarketID, int den, int druhZbozi) {
+	private void uspokojenizCiny(int tovarnaID, int supermarketID, int den, int druhZbozi) {
 		celkemZCiny += supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi);
 		if (tovarnaID == (-1)) { //pokud neexistuje tovarna ze ktere by se mohlo dovazet (strom prazdny), take nutne obednat z Ciny, ale neni znamo ve ktere tov vznikl problem
 			System.out.println("T" + (den+1) + ": Nedostupne tovarny - neni mozne uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.");
@@ -421,10 +421,25 @@ public class Simulace {
 	}
 	
 	/**
+	 * Metoda zajistuje pripocteni zbylych vyrobku z predchoziho dne k aktualni produkci (umoznuje v simualci uvazovat odesilani i ks zbozi ktere zbyly v tovarnach z predchozich dnu) 
+	 * @param tovarnyPrepocteniProd Seznam tovaren
+	 * @param den Aktualni den
+	 */
+	private void prepocteniProdukceDalsiDen(List<Tovarna> tovarnyPrepocteniProd, int den) {
+		for (int i = 0; i < tovarnyPrepocteniProd.size(); i++) { //k produkcim kazdeho druhu zbozi v dany den pricist to co zbylo z minuleho dne
+			for (int j = 0; j < pocetZ; j++) {
+				tovarnyPrepocteniProd.get(i).setZvyseniProdukce(den, j, tovarnyPrepocteniProd.get(i).getProdukce(den-1, j));
+			}
+		}
+	}
+	
+
+	/**
 	 * Pomocna metoda stanoveni celkove poptavky pro cele obdobi (pro kontrolu s pocty odeslanych vyrobku)
 	 * @return hodnota celkove poptavky
 	 */
-	public void stanoveniCelkPopt() {
+	/*
+	private void stanoveniCelkPopt() {
 		int celkPopt = 0; 
 		for (int i = 0; i < pocetS; i++) {
 			Supermarket s = supermarkety.get(i);
@@ -436,18 +451,6 @@ public class Simulace {
 		}
 		System.out.println("celkova popt: " + celkPopt);
 	}
-	
-	/**
-	 * Metoda zajistuje pripocteni zbylych vyrobku z predchoziho dne k aktualni produkci (umoznuje v simualci uvazovat odesilani i ks zbozi ktere zbyly v tovarnach z predchozich dnu) 
-	 * @param tovarnyPrepocteniProd Seznam tovaren
-	 * @param den Aktualni den
-	 */
-	public void prepocteniProdukceDalsiDen(List<Tovarna> tovarnyPrepocteniProd, int den) {
-		for (int i = 0; i < tovarnyPrepocteniProd.size(); i++) { //k produkcim kazdeho druhu zbozi v dany den pricist to co zbylo z minuleho dne
-			for (int j = 0; j < pocetZ; j++) {
-				tovarnyPrepocteniProd.get(i).setZvyseniProdukce(den, j, tovarnyPrepocteniProd.get(i).getProdukce(den-1, j));
-			}
-		}
-	}
+	*/
 	
 }
