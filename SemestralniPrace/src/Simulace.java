@@ -93,7 +93,8 @@ public class Simulace {
 	}
 	
 	/**
-	 * Metoda spousti simulaci
+	 *  Metoda spousti simulaci
+	 * @return celkova cena spocitana behem simulace
 	 */
 	public int startSimulation() {
 		BST bstSup; //strom pro urceni nejvyssich poptavek
@@ -248,9 +249,9 @@ public class Simulace {
 	
 	/**
 	 * Metoda zajistuje uspokojeni poptavky supermarketu, pokud nejsou dostupne tovarny ze kterych lze dovazet a pokud ma supermarket zasoby na sklade
-	 * @param supermarketSnejPoptID
-	 * @param den
-	 * @param druhZbozi
+	 * @param supermarketSnejPoptID Aktualni supermarket
+	 * @param den Aktualni den
+	 * @param druhZbozi Aktualni druh zbozi
 	 */
 	public void uspokojeniPoptPriNedostupnostiTovaren(int supermarketSnejPoptID, int den, int druhZbozi) {
 		zeSkladu(supermarkety.get(supermarketSnejPoptID-1), den, druhZbozi);

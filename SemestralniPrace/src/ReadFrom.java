@@ -29,7 +29,7 @@ public class ReadFrom {
 	
 	/**
 	 * Metoda zajistujici cteni radek, ignoruje prazdne radky a radky zacinajici #
-	 * @return LinkedList<String> spojovy seznam nactenych (vyfiltrovanych radek)
+	 * @return LinkedList spojovy seznam nactenych (vyfiltrovanych radek)
 	 */
 	public LinkedList<String> nactiData() {
 		LinkedList<String> data = new LinkedList<String>();

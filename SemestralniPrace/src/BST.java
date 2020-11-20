@@ -16,7 +16,7 @@ public class BST {
 
 	/**
 	 * Getr vrati pocet uzlu stromu
-	 * @return
+	 * @return hodnota poctu uzlu stromu
 	 */
 	public int getCounterNodes() {
 		return counterNodes;

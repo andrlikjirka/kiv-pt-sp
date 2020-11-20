@@ -106,7 +106,6 @@ public class Main {
 	
 	/**
 	 * Metoda vybere z nactenych dat inicializacni radku s potrebnymi hodnotami (pocetD, pocetS, pocetZ, pocetT)
-	 * @param nactenaData Seznam nactenych dat
 	 */
 	public static void radkaInicializace() {
 		String[] radkaInicializace = nactenaData.getFirst().split(" ");
@@ -129,7 +128,6 @@ public class Main {
 	
 	/**
 	 * Metoda rozdeli nactena data do souhrnnych matic
-	 * @param nacteni Seznam nactenych dat
 	 */
 	public static void rozdeleniDatDoSouhrnMatic() {
 		//vytvoreni matic pro data (ceny prevozu, pocatecni zasoby S, produkce D, poptavka S), rozmery dle vstupniho souboru

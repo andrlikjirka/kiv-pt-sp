@@ -23,7 +23,10 @@
 /SemestralniPrace/bin/
 
 #vystupni soubory
-/SemestralniPrace/vystup-soubory
+/SemestralniPrace/vystup-soubory/
+
+#pmd-vystup
+/SemestralniPrace/pmd-vystup/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
