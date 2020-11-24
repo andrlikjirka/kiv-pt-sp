@@ -58,7 +58,7 @@ public class ReadFrom {
 			System.err.println("Doslo k nezname chybe pri cteni souboru: " + nazevSouboru);
 			System.out.println("Program ukoncen.");
 			System.exit(1);
-		}
+		}	
 		return data;
 	} 
 }
