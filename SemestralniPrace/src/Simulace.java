@@ -18,7 +18,7 @@ public class Simulace {
 	/** Instance tridy zajistujici zapis do souboru - dovoz z Ciny */
 	public PrintTo vystupCina;
 	/** Nazev vystupniho souboru - prehled tovaren a rozvozu */
-	public static String NAZEV_PREHLEDU_TOV = "vystup-soubory/prehledTovaren.txt";
+	public static final String NAZEV_PREHLEDU_TOV = "vystup-soubory/prehledTovaren.txt";
 	/** Nazev vystupniho souboru - kazdodenni prehled skladovych zasob supermarketu */
 	public static final String NAZEV_PREHLEDU_SKLADU = "vystup-soubory/prehledSkladu.txt";
 	/** Nazve vystupniho souboru - dovoz z Ciny */
