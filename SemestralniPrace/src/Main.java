@@ -46,6 +46,8 @@ public class Main {
 	public static Scanner user;
 	/**	Seznam nactenych dat (vyfiltrovanych) */
 	public static LinkedList<String> nactenaData;
+	/**	Promenna oznacuje stav uspesneho nacteni dat (vstupniho souboru), pokud je true, lze prejit na cteni */
+	public static boolean uspesneNacteniDat;
 	
 	/**
 	 * Hlavni metoda (vstupni bod programu)
@@ -75,10 +77,13 @@ public class Main {
 	 * Metoda nacte a inicializuje potrebna data a zavola simulaci
 	 */
 	public static void simulace() {
-		NAZEV_VSTUPNIHO_SOUBORU = zadaniVstupu();
-		ReadFrom vstup = new ReadFrom(NAZEV_VSTUPNIHO_SOUBORU);
+		uspesneNacteniDat = false;
 		PrintTo vystupSimulace = new PrintTo(NAZEV_VYSTUPU_SIMULACE);
-		nacteni(vstup); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
+		do { //dokud se nepodari nacist platny soubor, opakuje se cyklus nacitani
+			NAZEV_VSTUPNIHO_SOUBORU = zadaniVstupu();
+			ReadFrom vstup = new ReadFrom(NAZEV_VSTUPNIHO_SOUBORU);
+			nacteni(vstup); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
+		} while (Boolean.compare(uspesneNacteniDat, false) == 0);
 		System.out.println("Spusteni simulace:");
 		long start = System.currentTimeMillis();
 		Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
@@ -107,9 +112,13 @@ public class Main {
 	 */
 	public static void nacteni(ReadFrom soubor) {
 		//seznam stringu obsahuje vycistena data ze souboru
-		nactenaData = soubor.nactiData();
-		//1. radku vyberu a odeberu (vytvorim z ni pole pro inicialiazci hodnot)
-		radkaInicializace();		
+		nactenaData = soubor.nactiData(); //pokud metoda nactiData vrati null (nepodarilo se nacist ze souboru kvuli IOException), nutno pozadovat znovu zadani platneho nazvu souboru
+		if (nactenaData == null) {
+			uspesneNacteniDat = false;
+			return;
+		}
+		uspesneNacteniDat = true;
+		radkaInicializace(); 	//1. radku vyberu a odeberu (vytvorim z ni pole pro inicialiazci hodnot)		
 		rozdeleniDatDoSouhrnMatic();
 		inicializaceTovarenSupermarketu(); //rozdeleni do matic poptavek a produkci
 	}

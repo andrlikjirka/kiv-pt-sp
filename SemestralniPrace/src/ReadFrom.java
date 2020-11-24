@@ -46,8 +46,7 @@ public class ReadFrom {
 			}
 		} catch (IOException e) {
 			System.err.println("Nelze cist ze souboru: " + nazevSouboru + ". Zkontrolujte nazev souboru.");
-			System.out.println("Program ukoncen.");
-			System.exit(1);
+			return null; 
 			
 		} catch (NoSuchElementException e) {
 			System.err.println("Soubor: " + nazevSouboru + " je prazdny.");
@@ -56,8 +55,7 @@ public class ReadFrom {
 			
 		} catch (Exception e){
 			System.err.println("Doslo k nezname chybe pri cteni souboru: " + nazevSouboru);
-			System.out.println("Program ukoncen.");
-			System.exit(1);
+			return null;
 		}	
 		return data;
 	} 
