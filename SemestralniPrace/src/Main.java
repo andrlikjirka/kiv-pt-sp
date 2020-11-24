@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class Main {
 	/** Nazev vstupniho souboru */
-	public static final String NAZEV_VSTUPNIHO_SOUBORU = "vstupni-data/test_optim.txt";
+	public static String NAZEV_VSTUPNIHO_SOUBORU;
 	/** Nazev vystupniho souboru - vystup simulace (doba, celk. cena) */
 	public static final String NAZEV_VYSTUPU_SIMULACE = "vystup-soubory/vystup-simulace.txt";
 	/** Pocet voleb v menu */
@@ -43,7 +43,7 @@ public class Main {
 	public static List<Supermarket> supermarkety;
 	
 	/** Scanner pro uzivatelsky vstup */ 
-	public static Scanner user = new Scanner(System.in);
+	public static Scanner user;
 	/**	Seznam nactenych dat (vyfiltrovanych) */
 	public static LinkedList<String> nactenaData;
 	
@@ -58,7 +58,6 @@ public class Main {
 			switch (volba)
 			{
 				case 1: //[1] - Spusteni zakladni simulace
-					System.out.println("Spusteni simulace:");
 					simulace();
 					break;
 					
@@ -76,10 +75,11 @@ public class Main {
 	 * Metoda nacte a inicializuje potrebna data a zavola simulaci
 	 */
 	public static void simulace() {
+		NAZEV_VSTUPNIHO_SOUBORU = zadaniVstupu();
 		ReadFrom vstup = new ReadFrom(NAZEV_VSTUPNIHO_SOUBORU);
 		PrintTo vystupSimulace = new PrintTo(NAZEV_VYSTUPU_SIMULACE);
 		nacteni(vstup); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
-
+		System.out.println("Spusteni simulace:");
 		long start = System.currentTimeMillis();
 		Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
 		int celkovaCena = s.startSimulation();
@@ -89,6 +89,16 @@ public class Main {
 		vystupSimulace.zapisDoSouboru("\n\nCas simulace: " + (konec-start) + "ms");
 		System.out.println("=========================");
 
+	}
+	
+	/**
+	 * Metoda nacte od uzivatele nazev vstupniho souboru
+	 * @return nazev vstup souboru
+	 */
+	private static String zadaniVstupu() {
+		System.out.print("Zadejte nazev vstupniho souboru: ");
+		String zadanyVstup = user.nextLine();
+		return zadanyVstup;
 	}
 	
 	/**
@@ -246,6 +256,7 @@ public class Main {
 	 * @return zadane cislo uzivatelem
 	 */
 	public static int userMenuQuery() {
+		user = new Scanner(System.in);
 		int input;
 		try{
 		    input = Integer.parseInt(user.nextLine());
