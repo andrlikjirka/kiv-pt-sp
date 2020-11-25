@@ -1,0 +1,93 @@
+# Data pro semestralni praci KIV/PT 2020/2021
+# Vytvoreno systemem jandrlik & kmotycko, 30.11.2020.
+#
+# prazdne radky nebo radky zacinajici znakem # se ingoruji
+# v opacnem pripade jsou na kazde radce ciselne hodnoty oddelene mezerou
+# data jsou popsana vzdy nad prislusnym blokem dat, bloky jsou oddelene
+# prazdnym radkem nasledujici radkem viditelne oznacenym vyrazem BLOK:
+
+# BLOK: pocet tovaren D, pocet supermarketu S, pocet druhu zbozi Z, pocet dni T
+2 2 3 5
+
+# BLOK: Cena prevozu jednoho zbozi c_{s,d}
+#
+# c_{1,1} c_{2,1} ... c_{S,1}
+# c_{1,2} c_{2,2} ... c_{S,2}
+#    .      .    .      .
+#    .      .     .     .
+#    .      .      .    .
+# c_{1,D} c_{2,D} ... c_{S,D}
+10 7
+8 2
+
+# BLOK: Pocatecni skladove zasoby q_{z,s}
+#
+# q_{1,1} q_{1,2} ... q_{1,S}
+# q_{2,1} q_{2,2} ... q_{2,S}
+#    .      .    .      .
+#    .      .     .     .
+#    .      .      .    .
+# q_{Z,1} q_{Z,2} ... q_{Z,S}
+40 71
+73 43
+49 65
+
+# BLOK: Produkce tovaren p_{d,z,t}
+# p_{1,1,1} p_{2,1,1} .... p_{D,1,1}
+# p_{1,1,2} p_{2,1,2} .... p_{D,1,2}
+#      .         .    .         .
+#      .         .     .        .
+#      .         .      .       .
+# p_{1,1,T} p_{2,1,T} .... p_{D,1,T}
+# p_{1,2,1} p_{2,2,1} .... p_{D,2,1}
+# p_{1,2,2} p_{2,2,2} .... p_{D,2,2}
+#      .         .    .         .
+#      .         .     .        .
+#      .         .      .       .
+#      .         .       .      .
+# p_{1,Z,T} p_{2,Z,T} .... p_{D,Z,T}
+20 30
+9 24
+14 20
+17 18
+21 27
+25 21
+32 6
+23 1
+23 24
+24 18
+21 8
+36 11
+22 17
+22 10
+13 25
+
+# BLOK: Poptavka zbozi r_{s,z,t}
+# r_{1,1,1} r_{2,1,1} .... r_{S,1,1}
+# r_{1,1,2} r_{2,1,2} .... r_{S,1,2}
+#      .         .    .         .
+#      .         .     .        .
+#      .         .      .       .
+# r_{1,1,T} r_{2,1,T} .... r_{S,1,T}
+# r_{1,2,1} r_{2,2,1} .... r_{S,2,1}
+# r_{1,2,2} r_{2,2,2} .... r_{S,2,2}
+#      .         .    .         .
+#      .         .     .        .
+#      .         .      .       .
+#      .         .       .      .
+# r_{1,Z,T} r_{2,Z,T} .... r_{S,Z,T}
+7 14
+44 14
+4 21
+5 24
+25 20
+37 18
+11 32
+15 21
+23 16
+17 26
+8 12
+27 18
+29 23
+34 34
+11 7

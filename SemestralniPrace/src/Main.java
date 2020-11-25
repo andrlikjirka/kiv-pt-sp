@@ -17,8 +17,9 @@ public class Main {
 	public static String NAZEV_VSTUPNIHO_SOUBORU;
 	/** Nazev vystupniho souboru - vystup simulace (doba, celk. cena) */
 	public static final String NAZEV_VYSTUPU_SIMULACE = "vystup-soubory/vystup-simulace.txt";
+	public static final String NAZEV_VYSTUPU_GENERATORU = "vygenerovana-data.txt";
 	/** Pocet voleb v menu */
-	public final static int POCET_VOLEB_MENU = 2;
+	public final static int POCET_VOLEB_MENU = 3;
 	
 	/** Pocet tovaren */
 	public static int pocetD;
@@ -59,18 +60,36 @@ public class Main {
 			int volba = startVolba();
 			switch (volba)
 			{
-				case 1: //[1] - Spusteni zakladni simulace
+				case 1: //[1] - Generovani vstupnich datasetu
+					generator();
+					break;
+				case 2: //[2] - Spusteni zakladni simulace
 					simulace();
 					break;
 					
-				case 2: //[2] - Exit
+				case 3: //[3] - Exit
 					System.out.println("_________________________\nProgram ukoncen.");
 					break out;
-				
 				default:
 					System.exit(0);
 			}
 		}
+	}
+	
+	/**	Metoda nacte od uzivatele potrebne hodnoty a spusti generovani vstupnich datasetu */
+	public static void generator() {
+		System.out.print("Pocet tovaren: ");
+		int d = user.nextInt();
+		System.out.print("Pocet supermarketu: ");
+		int s = user.nextInt();
+		System.out.print("Pocet druhu zbozi: ");
+		int z = user.nextInt();
+		System.out.print("Pocet dnu: ");
+		int t = user.nextInt();
+		Generator g = new Generator(d, s, z, t);
+		g.generovani(NAZEV_VYSTUPU_GENERATORU);
+		System.out.println("Vygenerovana data se nachazi v souboru: " + NAZEV_VYSTUPU_GENERATORU);
+		System.out.println("=========================");
 	}
 	
 	/**
@@ -93,7 +112,6 @@ public class Main {
 		vystupSimulace.zapisDoSouboru("Celkova cena prepravy za cele obdobi = " + celkovaCena);	
 		vystupSimulace.zapisDoSouboru("\n\nCas simulace: " + (konec-start) + "ms");
 		System.out.println("=========================");
-
 	}
 	
 	/**
@@ -138,11 +156,6 @@ public class Main {
 		pocetS = inicializace[1];
 		pocetZ = inicializace[2];
 		pocetT = inicializace[3];
-		//System.out.println("D " + pocetD);
-		//System.out.println("S " + pocetS);
-		//System.out.println("Z " + pocetZ);
-		//System.out.println("T " + pocetT);
-		//System.out.println();
 	}
 	
 	/**
@@ -250,13 +263,14 @@ public class Main {
 	 * Metoda vypisujici menu
 	 * @return String retezec voleb menu
 	 */
-	public static String menu() {
-		String menu = "";
-		menu += "Menu\n";
-		menu += "[1] Spustit simulaci\n";
-		menu += "[2] EXIT\n";
-		menu += "-------------------------\n";
-		menu += "Volba: ";
+	public static StringBuilder menu() {
+		StringBuilder menu = new StringBuilder();
+		menu.append("Menu\n");
+		menu.append("[1] Generovani vstupnich dat\n");
+		menu.append("[2] Spustit simulaci\n");
+		menu.append("[3] EXIT\n"); 
+		menu.append("-------------------------\n");
+		menu.append("Volba: ");
 		return menu;
 	}
 	
@@ -281,7 +295,7 @@ public class Main {
 	 * @return platna volba zadana uzivatelem
 	 */
 	public static int startVolba() {
-		String menu = menu();
+		StringBuilder menu = menu();
 		System.out.print(menu);
 		int volba = userMenuQuery();
 		while ((volba <= 0) || (volba > POCET_VOLEB_MENU)) {

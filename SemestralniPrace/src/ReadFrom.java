@@ -55,7 +55,8 @@ public class ReadFrom {
 			
 		} catch (Exception e){
 			System.err.println("Doslo k nezname chybe pri cteni souboru: " + nazevSouboru);
-			return null;
+			System.out.println("Program ukoncen.");
+			System.exit(1);
 		}	
 		return data;
 	} 
