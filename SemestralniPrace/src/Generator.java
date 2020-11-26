@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 /**
@@ -39,8 +41,9 @@ public class Generator {
 	/**	Rozptyl hodnot poptavky sup. pravd. vygenerovani */
 	private final int R_DEVIATION = 10;
 	
-	/**	Vypis do souboru */
-	private PrintTo vystup;
+	/**	Textovy retezec generovanych dat */
+	private StringBuilder data;
+
 	
 	/**
 	 * Konstruktor priradi hodnoty poctu D, S, Z, T zadane uzivatelem 
@@ -64,25 +67,47 @@ public class Generator {
 	 */
 	public void generovani(String nazevSouboru) {
 		Random random = new Random();
-		vystup = new PrintTo(nazevSouboru);
+		data = new StringBuilder();
+		PrintTo vystup = new PrintTo(nazevSouboru);
 		generovaniUvod();
 		generovaniC(random);
 		generovaniQ(random);
 		generovaniP(random);
 		generovaniR(random);
+		vystup.zapisDoSouboru(data.toString());
+	}
+	
+	/**
+	 * Metoda vraci aktualni datum dle urciteho formatu
+	 * @return datum
+	 */
+	private String datum() {
+		LocalDate date = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		String datum = date.format(formatter);
+		return datum;
 	}
 	
 	/**	Metoda generuje uvodni informace */
 	private void generovaniUvod() {
-		vystup.zapisDoSouboru("# Data pro semestralni praci KIV/PT 2020/2021");
-		vystup.zapisDoSouboru("\n# Vytvoreno systemem jandrlik & kmotycko, 30.11.2020.");
-		vystup.zapisDoSouboru("\n#");
-		vystup.zapisDoSouboru("\n# prazdne radky nebo radky zacinajici znakem # se ingoruji");
-		vystup.zapisDoSouboru("\n# v opacnem pripade jsou na kazde radce ciselne hodnoty oddelene mezerou");
-		vystup.zapisDoSouboru("\n# data jsou popsana vzdy nad prislusnym blokem dat, bloky jsou oddelene");
-		vystup.zapisDoSouboru("\n# prazdnym radkem nasledujici radkem viditelne oznacenym vyrazem BLOK:\n");
-		vystup.zapisDoSouboru("\n# BLOK: pocet tovaren D, pocet supermarketu S, pocet druhu zbozi Z, pocet dni T\n");
-		vystup.zapisDoSouboru(pocetD + " " + pocetS + " " + pocetZ + " " + pocetT + "\n");
+		data.append("# Data pro semestralni praci KIV/PT 2020/2021");
+		data.append("\n# Vytvoreno systemem jandrlik & kmotycko, ");
+		data.append(datum());
+		data.append("."); 
+		data.append("\n#");
+		data.append("\n# prazdne radky nebo radky zacinajici znakem # se ingoruji");
+		data.append("\n# v opacnem pripade jsou na kazde radce ciselne hodnoty oddelene mezerou");
+		data.append("\n# data jsou popsana vzdy nad prislusnym blokem dat, bloky jsou oddelene");
+		data.append("\n# prazdnym radkem nasledujici radkem viditelne oznacenym vyrazem BLOK:\n");
+		data.append("\n# BLOK: pocet tovaren D, pocet supermarketu S, pocet druhu zbozi Z, pocet dni T\n");
+		data.append(pocetD);
+		data.append(" ");
+		data.append(pocetS);
+		data.append(" ");
+		data.append(pocetZ);
+		data.append(" ");
+		data.append(pocetT);
+		data.append("\n");
 	}
 	
 	/**
@@ -90,16 +115,16 @@ public class Generator {
 	 *  @param random Generator (gaussian method)
 	 */
 	private void generovaniC(Random random) { 
-		vystup.zapisDoSouboru("\n");
-		vystup.zapisDoSouboru("# BLOK: Cena prevozu jednoho zbozi c_{s,d}");
-		vystup.zapisDoSouboru("\n#");
-		vystup.zapisDoSouboru("\n# c_{1,1} c_{2,1} ... c_{S,1}");
-		vystup.zapisDoSouboru("\n# c_{1,2} c_{2,2} ... c_{S,2}");
-		vystup.zapisDoSouboru("\n#    .      .    .      .");
-		vystup.zapisDoSouboru("\n#    .      .     .     .");
-		vystup.zapisDoSouboru("\n#    .      .      .    .");
-		vystup.zapisDoSouboru("\n# c_{1,D} c_{2,D} ... c_{S,D}\n");
-	
+		data.append("\n");
+		data.append("# BLOK: Cena prevozu jednoho zbozi c_{s,d}");
+		data.append("\n#");
+		data.append("\n# c_{1,1} c_{2,1} ... c_{S,1}");
+		data.append("\n# c_{1,2} c_{2,2} ... c_{S,2}");
+		data.append("\n#    .      .    .      .");
+		data.append("\n#    .      .    .      .");
+		data.append("\n#    .      .    .      .");
+		data.append("\n# c_{1,D} c_{2,D} ... c_{S,D}\n");
+		
 		for(int i = 0; i<pocetD; i++){
 			for(int j = 0; j<pocetS; j++){
 				int cena = 0;
@@ -107,12 +132,12 @@ public class Generator {
 					double c = random.nextGaussian()*C_DEVIATION + C_MEAN;
 					cena = (int) Math.abs(Math.round(c));
 				} 
-				vystup.zapisDoSouboru(Integer.toString(cena));
+				data.append(Integer.toString(cena));
 				if (j != pocetS-1) {
-					vystup.zapisDoSouboru(" ");	
+					data.append(" ");
 				}
 			}
-			vystup.zapisDoSouboru("\n");
+			data.append("\n");
 		}
 	}
 	
@@ -121,26 +146,26 @@ public class Generator {
 	 * @param random Generator (gaussian method)
 	 */
 	private void generovaniQ(Random random) {
-		vystup.zapisDoSouboru("\n");
-		vystup.zapisDoSouboru("# BLOK: Pocatecni skladove zasoby q_{z,s}");
-		vystup.zapisDoSouboru("\n#");
-		vystup.zapisDoSouboru("\n# q_{1,1} q_{1,2} ... q_{1,S}");
-		vystup.zapisDoSouboru("\n# q_{2,1} q_{2,2} ... q_{2,S}");
-		vystup.zapisDoSouboru("\n#    .      .    .      .");
-		vystup.zapisDoSouboru("\n#    .      .     .     .");
-		vystup.zapisDoSouboru("\n#    .      .      .    .");
-		vystup.zapisDoSouboru("\n# q_{Z,1} q_{Z,2} ... q_{Z,S}\n");
-
+		data.append("\n");
+		data.append("# BLOK: Pocatecni skladove zasoby q_{z,s}");
+		data.append("\n#");
+		data.append("\n# q_{1,1} q_{1,2} ... q_{1,S}");
+		data.append("\n# q_{2,1} q_{2,2} ... q_{2,S}");
+		data.append("\n#    .      .    .      .");
+		data.append("\n#    .      .    .      .");
+		data.append("\n#    .      .    .      .");
+		data.append("\n# q_{Z,1} q_{Z,2} ... q_{Z,S}\n");
+		
 		for(int i = 0; i<pocetZ; i++){
 			for(int j = 0; j<pocetS; j++){
 				double q = random.nextGaussian()*Q_DEVIATION + Q_MEAN;
 				int pocZas = (int) Math.abs(Math.round(q));
-				vystup.zapisDoSouboru(Integer.toString(pocZas));
+				data.append(Integer.toString(pocZas));
 				if (j != pocetS-1) {
-					vystup.zapisDoSouboru(" ");	
+					data.append(" ");	
 				}
 			}
-			vystup.zapisDoSouboru("\n");
+			data.append("\n");
 		}
 	}
 	
@@ -149,32 +174,32 @@ public class Generator {
 	 * @param random Generator (gaussian method)
 	 */
 	private void generovaniP(Random random) {
-		vystup.zapisDoSouboru("\n");
-		vystup.zapisDoSouboru("# BLOK: Produkce tovaren p_{d,z,t}");
-		vystup.zapisDoSouboru("\n# p_{1,1,1} p_{2,1,1} .... p_{D,1,1}");
-		vystup.zapisDoSouboru("\n# p_{1,1,2} p_{2,1,2} .... p_{D,1,2}");
-		vystup.zapisDoSouboru("\n#      .         .    .         .");
-		vystup.zapisDoSouboru("\n#      .         .     .        .");
-		vystup.zapisDoSouboru("\n#      .         .      .       .");
-		vystup.zapisDoSouboru("\n# p_{1,1,T} p_{2,1,T} .... p_{D,1,T}");
-		vystup.zapisDoSouboru("\n# p_{1,2,1} p_{2,2,1} .... p_{D,2,1}");
-		vystup.zapisDoSouboru("\n# p_{1,2,2} p_{2,2,2} .... p_{D,2,2}");
-		vystup.zapisDoSouboru("\n#      .         .    .         .");
-		vystup.zapisDoSouboru("\n#      .         .     .        .");
-		vystup.zapisDoSouboru("\n#      .         .      .       .");
-		vystup.zapisDoSouboru("\n#      .         .       .      .");
-		vystup.zapisDoSouboru("\n# p_{1,Z,T} p_{2,Z,T} .... p_{D,Z,T}\n");
-		
+		data.append("\n");
+		data.append("# BLOK: Produkce tovaren p_{d,z,t}");
+		data.append("\n# p_{1,1,1} p_{2,1,1} .... p_{D,1,1}");
+		data.append("\n# p_{1,1,2} p_{2,1,2} .... p_{D,1,2}");
+		data.append("\n#      .         .    .         .");
+		data.append("\n#      .         .     .        .");
+		data.append("\n#      .         .      .       .");
+		data.append("\n# p_{1,1,T} p_{2,1,T} .... p_{D,1,T}");
+		data.append("\n# p_{1,2,1} p_{2,2,1} .... p_{D,2,1}");
+		data.append("\n# p_{1,2,2} p_{2,2,2} .... p_{D,2,2}");
+		data.append("\n#      .         .    .         .");
+		data.append("\n#      .         .     .        .");
+		data.append("\n#      .         .      .       .");
+		data.append("\n#      .         .       .      .");
+		data.append("\n# p_{1,Z,T} p_{2,Z,T} .... p_{D,Z,T}\n");
+	
 		for(int i = 0; i<pocetZ*pocetT; i++){
 			for(int j = 0; j<pocetD; j++){
 				double p = random.nextGaussian()*P_DEVIATION + P_MEAN;
 				int produkce = (int) Math.abs(Math.round(p));
-				vystup.zapisDoSouboru(Integer.toString(produkce));
+				data.append(Integer.toString(produkce));
 				if (j != pocetD-1) {
-					vystup.zapisDoSouboru(" ");
+					data.append(" ");
 				}
 			}
-			vystup.zapisDoSouboru("\n");
+			data.append("\n");
 		}
 
 	}
@@ -184,32 +209,32 @@ public class Generator {
 	 * @param random Generator (gaussian method)
 	 */
 	private void generovaniR(Random random) {
-		vystup.zapisDoSouboru("\n");
-		vystup.zapisDoSouboru("# BLOK: Poptavka zbozi r_{s,z,t}");
-		vystup.zapisDoSouboru("\n# r_{1,1,1} r_{2,1,1} .... r_{S,1,1}");
-		vystup.zapisDoSouboru("\n# r_{1,1,2} r_{2,1,2} .... r_{S,1,2}");
-		vystup.zapisDoSouboru("\n#      .         .    .         .");
-		vystup.zapisDoSouboru("\n#      .         .     .        .");
-		vystup.zapisDoSouboru("\n#      .         .      .       .");
-		vystup.zapisDoSouboru("\n# r_{1,1,T} r_{2,1,T} .... r_{S,1,T}");
-		vystup.zapisDoSouboru("\n# r_{1,2,1} r_{2,2,1} .... r_{S,2,1}");
-		vystup.zapisDoSouboru("\n# r_{1,2,2} r_{2,2,2} .... r_{S,2,2}");
-		vystup.zapisDoSouboru("\n#      .         .    .         .");
-		vystup.zapisDoSouboru("\n#      .         .     .        .");
-		vystup.zapisDoSouboru("\n#      .         .      .       .");
-		vystup.zapisDoSouboru("\n#      .         .       .      .");
-		vystup.zapisDoSouboru("\n# r_{1,Z,T} r_{2,Z,T} .... r_{S,Z,T}\n");
+		data.append("\n");
+		data.append("# BLOK: Poptavka zbozi r_{s,z,t}");
+		data.append("\n# r_{1,1,1} r_{2,1,1} .... r_{S,1,1}");
+		data.append("\n# r_{1,1,2} r_{2,1,2} .... r_{S,1,2}");
+		data.append("\n#      .         .    .         .");
+		data.append("\n#      .         .     .        .");
+		data.append("\n#      .         .      .       .");
+		data.append("\n# r_{1,1,T} r_{2,1,T} .... r_{S,1,T}");
+		data.append("\n# r_{1,2,1} r_{2,2,1} .... r_{S,2,1}");
+		data.append("\n# r_{1,2,2} r_{2,2,2} .... r_{S,2,2}");
+		data.append("\n#      .         .    .         .");
+		data.append("\n#      .         .     .        .");
+		data.append("\n#      .         .      .       .");
+		data.append("\n#      .         .       .      .");
+		data.append("\n# r_{1,Z,T} r_{2,Z,T} .... r_{S,Z,T}\n");
 		
 		for(int i = 0; i<pocetZ*pocetT; i++){
 			for(int j = 0; j<pocetS; j++){
 				double r = random.nextGaussian()*R_DEVIATION + R_MEAN;
 				int poptavka = (int) Math.abs(Math.round(r));
-				vystup.zapisDoSouboru(Integer.toString(poptavka));
+				data.append(Integer.toString(poptavka));
 				if (j != pocetS-1) {
-					vystup.zapisDoSouboru(" ");
+					data.append(" ");
 				}
 			}
-			vystup.zapisDoSouboru("\n");
+			data.append("\n");
 		}
 	}
 	
