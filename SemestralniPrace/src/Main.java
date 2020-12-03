@@ -98,11 +98,14 @@ public class Main {
 	public static void simulace() {
 		uspesneNacteniDat = false;
 		PrintTo vystupSimulace = new PrintTo(NAZEV_VYSTUPU_SIMULACE);
-		do { //dokud se nepodari nacist platny soubor, opakuje se cyklus nacitani
+		while (Boolean.compare(uspesneNacteniDat, false) == 0) {//dokud se nepodari nacist platny soubor, opakuje se cyklus nacitani
 			NAZEV_VSTUPNIHO_SOUBORU = zadaniVstupu();
+			if (NAZEV_VSTUPNIHO_SOUBORU.equals("")) { //pokud uzivatel zada prazdny nazev, opakuje se dotaz
+				continue;
+			}
 			ReadFrom vstup = new ReadFrom(NAZEV_VSTUPNIHO_SOUBORU);
 			nacteni(vstup); //metoda nacte data ze souboru, inicializuje potrebne parametry (D,S,Z,T) a matice cenyPrevozu, pocZasoby, produkceD, poptavkyS 
-		} while (Boolean.compare(uspesneNacteniDat, false) == 0);
+		}
 		System.out.println("Spusteni simulace:");
 		long start = System.currentTimeMillis();
 		Simulace s = new Simulace(tovarny, supermarkety, cenyPrevozu, pocetD, pocetS, pocetZ, pocetT);
@@ -162,11 +165,25 @@ public class Main {
 	 * Metoda rozdeli nactena data do souhrnnych matic
 	 */
 	public static void rozdeleniDatDoSouhrnMatic() {
-		//vytvoreni matic pro data (ceny prevozu, pocatecni zasoby S, produkce D, poptavka S), rozmery dle vstupniho souboru
-		cenyPrevozu = new int[pocetD][pocetS];
-		pocZasoby = new int[pocetZ][pocetS];
-		produkceD = new int[pocetZ*pocetT][pocetD];
-		poptavkyS = new int[pocetZ*pocetT][pocetS];
+		try {
+			//vytvoreni matic pro data (ceny prevozu, pocatecni zasoby S, produkce D, poptavka S), rozmery dle vstupniho souboru
+			cenyPrevozu = new int[pocetD][pocetS];
+			pocZasoby = new int[pocetZ][pocetS];
+			produkceD = new int[pocetZ*pocetT][pocetD];
+			poptavkyS = new int[pocetZ*pocetT][pocetS];
+			dataDoSouhrnMatic();
+			if (nactenaData.size() != 0) {
+				throw new Exception();
+			}
+		} catch (Exception format) {
+			System.err.println("Vstupni data neodpovidaji pozadovanemu formatu.");
+			System.out.println("Program ukoncen. Zkontrolujte vstupni soubor. ");
+			System.exit(1);
+		}
+	}
+	
+	/**	Metoda obsahuje potrebne prikazy pro rozdeleni dat do souhrnnych matic */
+	private static void dataDoSouhrnMatic() {
 		for (int d = 0; d < pocetD; d ++) { //inicializace pole cen prevozu
 			String[] line = nactenaData.getFirst().split(" "); //vzdy prvni radku rozdelim do pole Stringu - kazda hodnota je na svem miste v poli
 			nactenaData.removeFirst();

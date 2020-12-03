@@ -1,5 +1,5 @@
 # Data pro semestralni praci KIV/PT 2020/2021
-# Vytvoreno systemem jandrlik & kmotycko, 27.11.2020.
+# Vytvoreno systemem jandrlik & kmotycko, 03.12.2020.
 #
 # prazdne radky nebo radky zacinajici znakem # se ingoruji
 # v opacnem pripade jsou na kazde radce ciselne hodnoty oddelene mezerou
@@ -7,7 +7,7 @@
 # prazdnym radkem nasledujici radkem viditelne oznacenym vyrazem BLOK:
 
 # BLOK: pocet tovaren D, pocet supermarketu S, pocet druhu zbozi Z, pocet dni T
-3 3 5 5
+2 2 2 3
 
 # BLOK: Cena prevozu jednoho zbozi c_{s,d}
 #
@@ -17,9 +17,8 @@
 #    .      .    .      .
 #    .      .    .      .
 # c_{1,D} c_{2,D} ... c_{S,D}
-6 1 6
-3 3 3
-2 1 1
+4 3
+3 5
 
 # BLOK: Pocatecni skladove zasoby q_{z,s}
 #
@@ -29,11 +28,8 @@
 #    .      .    .      .
 #    .      .    .      .
 # q_{Z,1} q_{Z,2} ... q_{Z,S}
-77 86 80
-53 55 76
-52 26 77
-82 51 74
-23 102 29
+96 78
+68 84
 
 # BLOK: Produkce tovaren p_{d,z,t}
 # p_{1,1,1} p_{2,1,1} .... p_{D,1,1}
@@ -49,31 +45,12 @@
 #      .         .      .       .
 #      .         .       .      .
 # p_{1,Z,T} p_{2,Z,T} .... p_{D,Z,T}
-12 32 32
-6 11 16
-20 22 24
-8 14 3
-10 23 23
-6 1 25
-18 26 35
-43 27 8
-26 32 7
-3 43 26
-26 16 2
-9 17 15
-22 15 13
-20 9 26
-10 12 26
-12 28 19
-28 17 21
-33 29 13
-22 11 17
-25 40 3
-9 16 32
-8 13 11
-10 24 34
-17 21 12
-20 44 17
+12 20
+32 17
+7 25
+8 25
+21 43
+19 31
 
 # BLOK: Poptavka zbozi r_{s,z,t}
 # r_{1,1,1} r_{2,1,1} .... r_{S,1,1}
@@ -89,28 +66,9 @@
 #      .         .      .       .
 #      .         .       .      .
 # r_{1,Z,T} r_{2,Z,T} .... r_{S,Z,T}
-31 28 14
-31 18 17
-19 26 24
-7 32 27
-27 19 12
-20 6 12
-14 9 16
-13 17 11
-27 25 10
-19 38 11
-4 21 5
-10 16 14
-29 31 20
-11 40 21
-35 47 19
-25 3 34
-9 21 29
-32 20 25
-16 31 30
-33 18 18
-25 13 18
-26 32 15
-1 29 29
-18 22 12
-10 23 14
+32 26
+23 29
+23 19
+14 21
+20 22
+28 15
