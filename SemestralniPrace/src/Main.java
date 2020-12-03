@@ -97,7 +97,6 @@ public class Main {
 	 */
 	public static void simulace() {
 		uspesneNacteniDat = false;
-		PrintTo vystupSimulace = new PrintTo(NAZEV_VYSTUPU_SIMULACE);
 		while (Boolean.compare(uspesneNacteniDat, false) == 0) {//dokud se nepodari nacist platny soubor, opakuje se cyklus nacitani
 			NAZEV_VSTUPNIHO_SOUBORU = zadaniVstupu();
 			if (NAZEV_VSTUPNIHO_SOUBORU.equals("")) { //pokud uzivatel zada prazdny nazev, opakuje se dotaz
@@ -112,8 +111,9 @@ public class Main {
 		int celkovaCena = s.startSimulation();
 		long konec = System.currentTimeMillis();
 		
+		PrintTo vystupSimulace = new PrintTo(NAZEV_VYSTUPU_SIMULACE);
 		vystupSimulace.zapisDoSouboru("Celkova cena prepravy za cele obdobi = " + celkovaCena);	
-		vystupSimulace.zapisDoSouboru("\n\nCas simulace: " + (konec-start) + "ms");
+		vystupSimulace.zapisDoSouboru("\n\nCas simulace: " + (konec-start) + "ms"); 
 		System.out.println("=========================");
 	}
 	
