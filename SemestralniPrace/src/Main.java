@@ -44,7 +44,7 @@ public class Main {
 	public static List<Supermarket> supermarkety;
 	
 	/** Scanner pro uzivatelsky vstup */ 
-	public static Scanner user;
+	public static Scanner user = new Scanner(System.in);
 	/**	Seznam nactenych dat (vyfiltrovanych) */
 	public static LinkedList<String> nactenaData;
 	/**	Promenna oznacuje stav uspesneho nacteni dat (vstupniho souboru), pokud je true, lze prejit na cteni */
@@ -60,7 +60,7 @@ public class Main {
 			int volba = startVolba();
 			switch (volba)
 			{
-				case 1: //[1] - Generovani vstupnich datasetu
+				case 1: //[1] - Generovani vstupniho datasetu
 					generator();
 					break;
 				case 2: //[2] - Spusteni zakladni simulace
@@ -79,13 +79,30 @@ public class Main {
 	/**	Metoda nacte od uzivatele potrebne hodnoty a spusti generovani vstupnich datasetu */
 	public static void generator() {
 		System.out.print("Pocet tovaren: ");
-		int d = user.nextInt();
+		int d = userQuery();
+		while (d <= 0) {
+			System.out.print("Zadejte dostupny pocet tovaren: ");
+			d = userQuery();
+		}
 		System.out.print("Pocet supermarketu: ");
-		int s = user.nextInt();
+		int s = userQuery();
+		while (s <= 0) {
+			System.out.print("Zadejte dostupny pocet supermarketu: ");
+			s = userQuery();
+		}
 		System.out.print("Pocet druhu zbozi: ");
-		int z = user.nextInt();
+		int z = userQuery();
+		while (z <= 0) {
+			System.out.print("Zadejte dostupny pocet druhu zbozi: ");
+			z = userQuery();
+		}
 		System.out.print("Pocet dnu: ");
-		int t = user.nextInt();
+		int t = userQuery();
+		while (t <= 0) {
+			System.out.print("Zadejte dostupny pocet dnu: ");
+			t = userQuery();
+		}
+		
 		Generator g = new Generator(d, s, z, t);
 		g.generovani(NAZEV_VYSTUPU_GENERATORU);
 		System.out.println("Vygenerovana data se nachazi v souboru: " + NAZEV_VYSTUPU_GENERATORU);
@@ -295,8 +312,7 @@ public class Main {
 	 * Uzivatelske zadavani volby menu (osetreni proti jinym formatum nez int)
 	 * @return zadane cislo uzivatelem
 	 */
-	public static int userMenuQuery() {
-		user = new Scanner(System.in);
+	public static int userQuery() {
 		int input;
 		try{
 		    input = Integer.parseInt(user.nextLine());
@@ -314,10 +330,10 @@ public class Main {
 	public static int startVolba() {
 		StringBuilder menu = menu();
 		System.out.print(menu);
-		int volba = userMenuQuery();
+		int volba = userQuery();
 		while ((volba <= 0) || (volba > POCET_VOLEB_MENU)) {
-			System.out.print("Zadejte dostupnou volbu: ");
-			volba = userMenuQuery();
+			System.out.print("Zadejte dostupnou volbu: "); 
+			volba = userQuery();
 		}
 		System.out.println();
 		return volba;
