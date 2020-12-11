@@ -59,6 +59,8 @@ public class Simulace {
 	/** Retezec pro vypsani dovozu z ciny */
 	public StringBuilder dovozZciny;
 	
+	public StringBuilder[] simulace;
+	
 	/**
 	 * Konstruktor vytvori instanci tridy Simulace
 	 * @param d Seznam tovaren
@@ -90,6 +92,10 @@ public class Simulace {
 			prehledSkladuSup[i].append("Poc. zasoby - " + s.get(i).skladToString() + "\n");
 		}
 		dovozZciny = new StringBuilder();
+		simulace = new StringBuilder[pocetT];
+		for (int i = 0; i < simulace.length; i++) {
+			simulace[i] = new StringBuilder();
+		}
 	}
 	
 	/**
@@ -103,12 +109,15 @@ public class Simulace {
 		//stanoveniCelkPopt();
 		
 		for (int t = 0; t < pocetT; t++) { //cyklus pres vsechny dny
-			System.out.println("T" + (t+1));
+			//System.out.println("T" + (t+1));
+			simulace[t].append("T" + (t+1) + "\n");
 			if (t >= 1) {
 				prepocteniProdukceDalsiDen(tovarny, t); // metoda prepocitani produkce ve vsech tovarnach pro druhy den a vys (pripocitani nevyuzitych ks z predchoziho dne)
 			}
+	
 			for (int z = 0; z < pocetZ; z++) { // cyklus prochazeni druhu zbozi
-				System.out.println("Pro Z" + (z + 1));
+				//System.out.println("Pro Z" + (z + 1));
+				simulace[t].append("Pro Z" + (z + 1) + "\n");
 				bstSup = vytvoreniStromuPoptavek(t, z);
 				pocetSveStromu = bstSup.getCounterNodes();
 				for (int s = 0; s < pocetSveStromu; s++) {		//pro kazdy supermarket potrebuji zjistit poradi tovaren a uspokojit poptavku po zbozi v dany den
@@ -119,11 +128,14 @@ public class Simulace {
 					hlavniMetodaACyklusUspokojovani(bstCenyDS, supermarketSnejPoptID, t, z);			
 					bstSup.removeMax(); //odstraneni supermarketu s nejvyssi poptavkou po jejim uspokojeni
 				}
-				System.out.println();
+				//System.out.println();
+				simulace[t].append("\n");
 				bstSup.clearBST();
 			}
 			zapisDoPrehleduSkladu(t+1); //na konci kazdeho dne zapiseme aktualni stav skladu
-			System.out.println("------------------------");	
+			//System.out.println("------------------------");	
+			simulace[t].append("------------------------\n");
+			System.out.print(simulace[t].toString()); //vypsani prubehu simulace pro den (ze StringBuilderu)
 		}
 		System.out.println("\nCelkova cena prepravy za cele obdobi = " + celkovaCena);
 		vytvoreniPrehleduTovaren();
@@ -353,7 +365,8 @@ public class Simulace {
 		//supermarkety.get(supermarket.getID()-1).potrebujeKoupitMesic[druhZbozi] -= odeslanozDdoS;
 		supermarkety.get(supermarket.getID()-1).setSnizeniPotrebujeKoupitZaObdobi(druhZbozi, odeslanozDdoS);
 		
-		System.out.println("D" + tovarna.getID() + " (nakl.auto) => " + "S" + supermarket.getID() + ": " + odeslanozDdoS + "ks, cena=" + cenaDilci);
+		//System.out.println("D" + tovarna.getID() + " (nakl.auto) => " + "S" + supermarket.getID() + ": " + odeslanozDdoS + "ks, cena=" + cenaDilci);
+		simulace[den].append("D" + tovarna.getID() + " (nakl.auto) => " + "S" + supermarket.getID() + ": " + odeslanozDdoS + "ks, cena=" + cenaDilci + "\n");
 		prehledTovaren[tovarna.getID()-1].append((den+1) + ". den - D" + tovarna.getID() + " => " + "S" + supermarket.getID() + ": " + odeslanozDdoS + "ks" + " (Z" + (druhZbozi+1) + "), cena=" + cenaDilci + "\n");
 	}
 	
@@ -387,7 +400,8 @@ public class Simulace {
 		celkemZeSkladu += pouzitoZeSkladu;
 		supermarket.setSnizeniSkladZasob(druhZbozi, pouzitoZeSkladu);
 		supermarket.setSnizeniPoptavky(den, druhZbozi, pouzitoZeSkladu); //snizeni poptavky o pocet ks pouzitych ze skladu
-		System.out.println("sklad => " + "S" + supermarket.getID() + ": " + pouzitoZeSkladu + "ks");
+		//System.out.println("sklad => " + "S" + supermarket.getID() + ": " + pouzitoZeSkladu + "ks");
+		simulace[den].append("sklad => " + "S" + supermarket.getID() + ": " + pouzitoZeSkladu + "ks\n");
 	}
 	
 	/**
@@ -400,10 +414,12 @@ public class Simulace {
 	private void uspokojenizCiny(int tovarnaID, int supermarketID, int den, int druhZbozi) {
 		celkemZCiny += supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi);
 		if (tovarnaID == (-1)) { //pokud neexistuje tovarna ze ktere by se mohlo dovazet (strom prazdny), take nutne obednat z Ciny, ale neni znamo ve ktere tov vznikl problem
-			System.out.println("T" + (den+1) + ": Nedostupne tovarny - neni mozne uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.");
+			//System.out.println("T" + (den+1) + ": Nedostupne tovarny - neni mozne uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.");
+			simulace[den].append("T" + (den+1) + ": Nedostupne tovarny - neni mozne uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.\n");
 		}
 		else {
-			System.out.println("T" + (den+1) + ": D" + tovarnaID + " nemuze uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.");
+			//System.out.println("T" + (den+1) + ": D" + tovarnaID + " nemuze uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.");
+			simulace[den].append("T" + (den+1) + ": D" + tovarnaID + " nemuze uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.\n");
 			dovozZciny.append("T" + (den+1) + ": D" + tovarnaID + " nemuze uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.\n");
 		}
 	}
