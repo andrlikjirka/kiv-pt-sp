@@ -26,7 +26,7 @@ Bližší informace k jednotlivým třídám včetně zobrazení vazeb a závisl
 
 ## Uživatelská dokumentace  
 #### Spuštění programu
-Ke spuštění programu je potřeba mít ve složce, kde máte uložený jar soubor, složku se vstupními soubory (jedná se o textové soubory se vstupními data-sety) a složku s názvem „vystup-soubory“ připravenou pro soubory k zápisu dat výstupních. Jelikož se nejedná o okenní aplikaci, lze ji spustit pouze v příkazovém řádku (najdete ho zmáčknutím klávesy `Windows` a napsáním příkazu `cmd`), kde následně zadáte cestu k místu, kde je uložený jar soubor a nakonec příkaz: `java -jar nazevsouboru.jar`.  
+Ke spuštění programu je potřeba mít ve složce, kde máte uložený jar soubor, složku se vstupními soubory (jedná se o textové soubory se vstupními data-sety) a složku s názvem `„vystup-soubory“` připravenou pro soubory k zápisu dat výstupních. Jelikož se nejedná o okenní aplikaci, lze ji spustit pouze v příkazovém řádku (najdete ho zmáčknutím klávesy `Windows` a napsáním příkazu `cmd`), kde následně zadáte cestu k místu, kde je uložený jar soubor a nakonec příkaz: `java -jar nazevsouboru.jar`.  
 
 #### Ovládání programu   
 Po spuštění programu se v příkazovém řádku vypíše menu, které vidíte na obrázku. Na výběr jsou zde 3 možnosti. Pro výběr požadavku napište jeho číslo do řádku se slovem Volba.  
