@@ -26,26 +26,26 @@ Na základě proběhlé simulace pak budeme generovat potřebné statistiky výs
 Ke spuštění programu je potřeba mít ve složce, kde máte uložený jar soubor, složku se vstupními soubory (jedná se o textové soubory se vstupními data-sety) a složku s názvem „vystup-soubory“ připravenou pro soubory k zápisu dat výstupních. Jelikož se nejedná o okenní aplikaci, lze ji spustit pouze v příkazovém řádku (najdete ho zmáčknutím klávesy `Windows` a napsáním příkazu `cmd`), kde následně zadáte cestu k místu, kde je uložený jar soubor a nakonec příkaz: `java -jar nazevsouboru.jar`.  
 
 #### Ovládání programu   
-Po spuštění programu se v příkazovém řádku vypíše menu, které vidíte na obrázku 2. Na výběr jsou zde 3 možnosti (viz tabulka). Pro výběr požadavku napište jeho číslo do řádku se slovem Volba. 
-| Menu | Volba                    |
-|------|--------------------------|
-| 1    | Generování vstupních dat | 
-| 2    | Spustit simulaci         |
-| 3    | EXIT                     |
+Po spuštění programu se v příkazovém řádku vypíše menu, které vidíte na obrázku. Na výběr jsou zde 3 možnosti. Pro výběr požadavku napište jeho číslo do řádku se slovem Volba.  
+![menu](https://raw.githubusercontent.com/andrlikjirka/SP-PT/main/SemestralniPrace/dokumentace/img/menu.png)
 
 * **Generování vstupních dat**  
-Při Zvolení možnosti *„1“ – Generování vstupních dat* bude program postupně vyžadovat požadovaný počet továren, počet supermarketů, počet druhů zboží a počet dnů. Po zadání těchto čtyř požadavků se vygenerují nová vstupní data s těmito požadovanými počty a zapíší se do souboru `vygenerovana-data.txt`. Vygenerovaný data-set najdete ve stejné složce, kde se nachází i Vámi spuštěný jar soubor. Tyto data pak můžete použít jako vstupní soubor pro simulaci, pokud nemáte k dispozici vlastní. 
---obr
+Při Zvolení možnosti *„1“ – Generování vstupních dat* bude program postupně vyžadovat požadovaný počet továren, počet supermarketů, počet druhů zboží a počet dnů. Po zadání těchto čtyř požadavků se vygenerují nová vstupní data s těmito požadovanými počty a zapíší se do souboru `vygenerovana-data.txt`. Vygenerovaný data-set najdete ve stejné složce, kde se nachází i Vámi spuštěný jar soubor. Tyto data pak můžete použít jako vstupní soubor pro simulaci, pokud nemáte k dispozici vlastní.  
+![generator](https://raw.githubusercontent.com/andrlikjirka/SP-PT/main/SemestralniPrace/dokumentace/img/generovani-dat.png)
 
 * **Spuštění simulace**    
-Pokud zvolíte možnost *„2“ - Spustit simulaci*, program bude vyžadovat název vstupního souboru, se kterým chcete pracovat. Pokud je tento soubor uložen ve složce, je potřeba zadat i jméno složky. Po jeho potvrzení se spustí simulace a začnou se po jednotlivých dnech a druzích zboží (Z) vypisovat informace, ze které továrny (D) do jakého supermarketu (S) se uskuteční převoz kolika kusů daného druhu zboží včetně ceny za tuto cestu. Také se vypíše celková cena přepravy za celé období, počet kusů vzatých ze skladu, počet kusů objednaných z Číny a počet kusů celkem odeslaných z továren.  To je zobrazeno na obrázku 5. Zároveň se ve výstupní složce vytvoří soubory s výstupními daty. 
---vystupnidata
---simulace
+Pokud zvolíte možnost *„2“ - Spustit simulaci*, program bude vyžadovat název vstupního souboru, se kterým chcete pracovat. Pokud je tento soubor uložen ve složce, je potřeba zadat i jméno složky. Po jeho potvrzení se spustí simulace a začnou se po jednotlivých dnech a druzích zboží (Z) vypisovat informace, ze které továrny (D) do jakého supermarketu (S) se uskuteční převoz kolika kusů daného druhu zboží včetně ceny za tuto cestu. Také se vypíše celková cena přepravy za celé období, počet kusů vzatých ze skladu, počet kusů objednaných z Číny a počet kusů celkem odeslaných z továren. Zároveň se ve výstupní složce vytvoří soubory s výstupními daty.  
+*Vstupní data*  
+![vstupni data](https://raw.githubusercontent.com/andrlikjirka/SP-PT/main/SemestralniPrace/dokumentace/img/vstupni-data.png)  
+*Spuštění simulace*  
+![simulace](https://raw.githubusercontent.com/andrlikjirka/SP-PT/main/SemestralniPrace/dokumentace/img/simulace.png)  
 
 * **Ukonceni programu**  
-Pokud zvolíte možnost „3“ – EXIT, program se ukončí a vypíše větu „Program ukončen“. 
+Pokud zvolíte možnost „3“ – EXIT, program se ukončí a vypíše větu „Program ukončen“.  
+![ukonceni](https://raw.githubusercontent.com/andrlikjirka/SP-PT/main/SemestralniPrace/dokumentace/img/ukonceni.png)  
 
-#### Popis výstupních charakteristik   
+#### Popis výstupních charakteristik  
+![vystupni charakteristiky](https://raw.githubusercontent.com/andrlikjirka/SP-PT/main/SemestralniPrace/dokumentace/img/vystup-soubory.png)  
 * **Přehled továren**  
 V souboru `prehledTovaren.txt` se vygenerují přehledy pro každou továrnu ze vstupního souboru. Tyto informace zahrnují ID továrny (D), číslo dne, ve kterém se převoz uskutečnil, ID supermarketu (S), do kterého jsme zboží vezli, druh převáženého zboží (Z), jeho počet kusů a cenu tohoto převozu. Pro každou továrnu se také vypíše počet zbytečně vyrobených kusů všech druhů zboží. 
 
@@ -57,5 +57,3 @@ Informace o tom, zda bude (nebo nebude) nutné objednat zboží z Číny a pří
 
 * **Simulace**  
 Celkovou cenu převozu za celé období a celkovou dobu běhu simulace pak uvádí soubor `vystup-simulace.txt`.  
-
-
