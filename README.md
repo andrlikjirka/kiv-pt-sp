@@ -21,6 +21,9 @@ Aby byla celková cena přepravy co možná nejnižší, bude třeba začít usp
 **Výstupní data**  
 Na základě proběhlé simulace pak budeme generovat potřebné statistiky výsledků do výstupních souborů, k čemuž bude sloužit další třída pro tento zápis. Ten pak bude probíhat konkrétně do 4 textových souborů, které se vytvoří v příslušné složce. 
 
+## Návrh programu
+Bližší informace k jednotlivým třídám včetně zobrazení vazeb a závislosti jsou k dispozici pomocí UML diagramu [zde](https://github.com/andrlikjirka/SP-PT/blob/main/SemestralniPrace/uml/uml.png).
+
 ## Uživatelská dokumentace  
 #### Spuštění programu
 Ke spuštění programu je potřeba mít ve složce, kde máte uložený jar soubor, složku se vstupními soubory (jedná se o textové soubory se vstupními data-sety) a složku s názvem „vystup-soubory“ připravenou pro soubory k zápisu dat výstupních. Jelikož se nejedná o okenní aplikaci, lze ji spustit pouze v příkazovém řádku (najdete ho zmáčknutím klávesy `Windows` a napsáním příkazu `cmd`), kde následně zadáte cestu k místu, kde je uložený jar soubor a nakonec příkaz: `java -jar nazevsouboru.jar`.  
