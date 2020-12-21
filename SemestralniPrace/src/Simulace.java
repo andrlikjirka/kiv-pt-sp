@@ -101,9 +101,7 @@ public class Simulace {
 	 * @return celkova cena spocitana behem simulace
 	 */
 	public int startSimulation() {
-		//BST bstSup; //strom pro urceni nejvyssich poptavek
-		//BST bstCenyDS; //strom pro urceni tovaren ze kterych lze dovezt nejlevneji
-		int pocetSveStromu = 0; //pocet supermarketu ve stromu
+		int pocetSveFronte = 0; //pocet supermarketu v prioritni fronte
 		//stanoveniCelkPopt();
 
 		for (int t = 0; t < pocetT; t++) { //cyklus pres vsechny dny
@@ -117,9 +115,9 @@ public class Simulace {
 				//System.out.println("Pro Z" + (z + 1));
 				simulace[t].append("Pro Z" + (z + 1) + "\n");
 				PriorityQueue<Node> sup = vytvoreniFrontyPoptavek(t, z); //prioritni fronta (max) poptavek
-				pocetSveStromu = sup.size();
+				pocetSveFronte = sup.size();
 
-				for (int s = 0; s < pocetSveStromu; s++) {		//pro kazdy supermarket potrebuji zjistit poradi tovaren a uspokojit poptavku po zbozi v dany den
+				for (int s = 0; s < pocetSveFronte; s++) {		//pro kazdy supermarket potrebuji zjistit poradi tovaren a uspokojit poptavku po zbozi v dany den
 					int supermarketSnejPoptID = sup.peek().ID;
 					uspokojenaPopt = false;
 					PriorityQueue<Node> cenyDS = vytvoreniFrontyCenDS(supermarketSnejPoptID, t, z);
@@ -145,25 +143,25 @@ public class Simulace {
 
 	/**
 	 * Hlavni metoda (cyklus) uspokojovani poptavek (uspokojovani pri nedostupnosti tovaren, uspokojovani z tovaren ci skladu - dle ceny cesty, uspokojovani z Ciny)
-	 * @param cenyDS Predany vytvoreny strom cen cest mezi D a supermarketem s nejvetsi popt
+	 * @param cenyDS Predana vytvorena prior. fronta cen cest mezi D a supermarketem s nejvetsi popt
 	 * @param supermarketSnejPoptID ID supermarketu s nejvetsi poptavkou
 	 * @param den Aktualni den
 	 * @param druhZbozi Aktualni druh zbozi
 	 */
 	public void hlavniMetodaACyklusUspokojovani(PriorityQueue<Node> cenyDS, int supermarketSnejPoptID, int den, int druhZbozi) {
 		int tovarnaSnejlevCestouID = -1; //vychozi hodnota -1 reprezentuje nedostupnost tovarny
-		if ((cenyDS.peek() == null) && (supermarkety.get(supermarketSnejPoptID-1).getSkladoveZasoby(druhZbozi) > 0)) { //pokud nejsou dostupne tovarny pro vytvoreni stromu a supermarket ma na sklade => uspokojeni popt ze skladu
+		if ((cenyDS.peek() == null) && (supermarkety.get(supermarketSnejPoptID-1).getSkladoveZasoby(druhZbozi) > 0)) { //pokud nejsou dostupne tovarny pro vytvoreni fronty a supermarket ma na sklade => uspokojeni popt ze skladu
 			uspokojeniPoptPriNedostupnostiTovaren(supermarketSnejPoptID, den, druhZbozi);
 		} else { //jinak klasicky vybirame nejlevnejsi tovarny ze stromu
 			double prumernaCenaDS = prumernaCenaDS(supermarketSnejPoptID); //prumerna cena mezi vybranym supermarketem a vsemi dostupnymi tovarnami
-			while (cenyDS.peek() != null) { //prochazi postupne tovarny s nejlevnejsi cestou dokud je nejaka ve stromu
+			while (cenyDS.peek() != null) { //prochazi postupne tovarny s nejlevnejsi cestou dokud je nejaka ve fronte
 				tovarnaSnejlevCestouID = cenyDS.peek().ID;
 				//volani metody pro uspokojovani poptavky (parametry - zjisteny S s nejvyssi poptavkou, zjisteny D s nejlevnejsi cestou, cena)
 				uspokojeniPoptavky(supermarkety.get(supermarketSnejPoptID-1), tovarny.get(tovarnaSnejlevCestouID-1), den, druhZbozi, cenyPrevozu[tovarnaSnejlevCestouID-1][supermarketSnejPoptID-1], prumernaCenaDS);
 				cenyDS.remove(); //odstraneni tovarny s nejnizsi cestou, opakovani cyklus pro najiti dalsi nejlevnejsi tovarny ze ktere lze dovezt a douspokojt popt
 
 				if (Boolean.compare(uspokojenaPopt, true) == 0) {
-					cenyDS.clear(); //pri predcasnem ukonceni cyklu je nutne vycistit strom, aby se pro dalsi supermarket vkladaly tovarny do prazdneho stromu
+					cenyDS.clear(); //pri predcasnem ukonceni cyklu je nutne vyprazdnit prior. frontu, aby se pro dalsi supermarket vkladaly tovarny do prazdne prior. fronty
 					break;
 				}
 			}
@@ -176,10 +174,10 @@ public class Simulace {
 	}
 
 	/**
-	 * Metoda vytvori strom poptavek supermarketu
+	 * Metoda vytvori prioritni frontu poptavek supermarketu
 	 * @param den Aktualni den
 	 * @param druhZbozi Aktualni druh zbozi
-	 * @return Vytvoreny strom poptavek
+	 * @return Vytvorena prioritni fronta poptavek
 	 */
 	private PriorityQueue<Node> vytvoreniFrontyPoptavek(int den, int druhZbozi) {
 		PriorityQueue<Node> sup = new PriorityQueue<Node>(new Comparator<Node>() {
@@ -192,21 +190,21 @@ public class Simulace {
 				return -1;
 			}
 		});
-		for (int s = 0; s < supermarkety.size(); s++) { // sestaveni stromu pro urceni nejvyssi poptavky
+		for (int s = 0; s < supermarkety.size(); s++) { // sestaveni prior. fronty pro urceni nejvyssi poptavky
 			int popt = supermarkety.get(s).getPoptavka(den, druhZbozi);
 			if (popt > 0) {
-				sup.add(new Node(popt, supermarkety.get(s).getID())); //do stromu vlozim jen nezaporne poptavky, pokud by S tedy chtel 0ks, simulace s nim vubec nebude pocitat
+				sup.add(new Node(popt, supermarkety.get(s).getID())); //do prior. fronty vlozim jen nezaporne poptavky, pokud by S tedy chtel 0ks, simulace s nim vubec nebude pocitat
 			}
 		}
 		return sup;
 	}
 
 	/**
-	 * Metoda vytvori strom cen cest mezi D a supermarketem s nejvetsi poptavkou
+	 * Metoda vytvori prioritni frontu cen cest mezi D a supermarketem s nejvetsi poptavkou
 	 * @param supermarketSnejPoptID Aktualni supermarket s nejvetsi poptavkou
 	 * @param den Aktualni den
 	 * @param druhZbozi Aktualni druh zbozi
-	 * @return Vytvoreny strom cen cest
+	 * @return Vytvorena prioritni fronta cen cest
 	 */
 	private PriorityQueue<Node> vytvoreniFrontyCenDS(int supermarketSnejPoptID, int den, int druhZbozi) {
 		PriorityQueue<Node> cenyDS = new PriorityQueue<Node>(new Comparator<Node>() {
@@ -221,10 +219,10 @@ public class Simulace {
 				return 1;
 			}
 		});
-		for (int d = 0; d < pocetD; d++) { // sestaveni stromu pro urceni tovarny s nejlevnejsi cenou
+		for (int d = 0; d < pocetD; d++) { // sestaveni prior. fronty pro urceni tovarny s nejlevnejsi cenou
 			int cena = cenyPrevozu[d][supermarketSnejPoptID - 1];
 			int prod = tovarny.get(d).getProdukce(den, druhZbozi);
-			if ((cena > 0) && (prod > 0)) { //do stromu se neprida tovarna s nulovou produkci, nebo ke ktere nevede cesta
+			if ((cena > 0) && (prod > 0)) { //do fronty se neprida tovarna s nulovou produkci, nebo ke ktere nevede cesta
 				cenyDS.add(new Node(cena,d + 1)); // klic je cena Prevozu z i-te tovarny do nejvyssiho supermarketu, ID je (d+1)-ta tovarna
 			}
 		}
@@ -431,7 +429,7 @@ public class Simulace {
 	 */
 	private void uspokojenizCiny(int tovarnaID, int supermarketID, int den, int druhZbozi) {
 		celkemZCiny += supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi);
-		if (tovarnaID == (-1)) { //pokud neexistuje tovarna ze ktere by se mohlo dovazet (strom prazdny), take nutne obednat z Ciny, ale neni znamo ve ktere tov vznikl problem
+		if (tovarnaID == (-1)) { //pokud neexistuje tovarna ze ktere by se mohlo dovazet (prior.fronta prazdna), take nutne obednat z Ciny, ale neni znamo ve ktere tov vznikl problem
 			//System.out.println("T" + (den+1) + ": Nedostupne tovarny - neni mozne uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.");
 			simulace[den].append("T" + (den+1) + ": Nedostupne tovarny - neni mozne uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.\n");
 		}
@@ -441,7 +439,7 @@ public class Simulace {
 			dovozZciny.append("T" + (den+1) + ": D" + tovarnaID + " nemuze uzasobit S" + supermarketID +  ". Nutne objednat " + supermarkety.get(supermarketID-1).getPoptavka(den, druhZbozi) + "ks z Ciny.\n");
 		}
 	}
-
+	
 	/**
 	 * Metoda vypocte prumernou cenu prevozu mezi vybranym supermarketem a vsemi tovarnami
 	 * @param s ID aktualniho supermarketu
