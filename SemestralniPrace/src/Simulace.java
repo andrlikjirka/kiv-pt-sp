@@ -180,16 +180,17 @@ public class Simulace {
 	 * @return Vytvorena prioritni fronta poptavek
 	 */
 	private PriorityQueue<Node> vytvoreniFrontyPoptavek(int den, int druhZbozi) {
+
 		PriorityQueue<Node> sup = new PriorityQueue<Node>(new Comparator<Node>() {
 			@Override
 			public int compare(Node o1, Node o2) {
 				if (o1.key < o2.key) {
-					return 1;
+					return -1;
 				}
 				if (o1.key == o2.key) return 0;
-				return -1;
+				return 1;
 			}
-		});
+		}.reversed());
 		for (int s = 0; s < supermarkety.size(); s++) { // sestaveni prior. fronty pro urceni nejvyssi poptavky
 			int popt = supermarkety.get(s).getPoptavka(den, druhZbozi);
 			if (popt > 0) {
