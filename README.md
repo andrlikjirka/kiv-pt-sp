@@ -1,4 +1,4 @@
-# SP-PT
+# SP-PT 
 Semestrální práce z předmětu KIV-PT
 
 #### Zadání semestrální práce: 
